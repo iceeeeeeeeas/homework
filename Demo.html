@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sdg16-blue: #00689D;
+            --white: #ffffff;
+            --correct-green: #28a745;
+            --error-red: #dc3545;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fcfcfc;
+            overflow: hidden; 
+        }
+
+        /* --- 第一幕：Hero 區塊 (法槌背景) --- */
+        #hero-layer {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 104, 157, 0.7), rgba(0, 104, 157, 0.7)), 
+                        url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            transition: all 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+            z-index: 10;
+        }
+
+        .fade-out-bg {
+            opacity: 0;
+            transform: scale(1.2);
+            pointer-events: none;
+        }
+
+        .start-btn {
+            padding: 12px 35px;
+            border: 2px solid var(--white);
+            color: var(--white);
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            background: transparent;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover { background: var(--white); color: var(--sdg16-blue); }
+
+        /* --- 第二幕：內容層 --- */
+        #content-layer {
+            opacity: 0;
+            padding: 80px 10%;
+            transition: opacity 2s ease;
+            text-align: center;
+        }
+        .show-content { opacity: 1 !important; }
+
+        /* --- 互動鴿子 --- */
+        #draggableDove {
+            position: fixed;
+            bottom: 40px; right: 40px;
+            font-size: 4.5rem;
+            cursor: move;
+            z-index: 2000;
+            display: none;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            user-select: none;
+        }
+
+        /* --- 測驗視窗 (根據截圖優化) --- */
+        .quiz-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 420px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            display: none;
+            z-index: 2001;
+            overflow: hidden;
+        }
+        .quiz-modal.active { display: block; }
+
+        .quiz-header { 
+            padding: 20px; 
+            text-align: center; 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            color: var(--sdg16-blue);
+            border-bottom: 1px solid #eee;
+            cursor: move;
+        }
+
+        .quiz-body { padding: 30px; text-align: center; }
+        .quiz-context { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #333; }
+
+        .btn-choice { 
+            background: var(--sdg16-blue); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            width: 100%; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            margin: 8px 0; 
+            font-size: 1rem;
+        }
+
+        #quiz-result { 
+            margin-top: 20px; 
+            font-weight: bold; 
+            display: none; 
+            line-height: 1.5;
+        }
+
+        .close-x { 
+            position: absolute; right: 15px; top: 10px; 
+            cursor: pointer; font-size: 1.5rem; color: #aaa; 
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="hero-layer">
+        <h1>SDG 16：和平與正義</h1>
+        <p>「沒有正義的和平只是壓迫，沒有和平的正義只是復仇。」</p>
+        <button class="start-btn" onclick="startExplore()">開始探索</button>
+    </div>
+
+    <div id="content-layer">
+        
+    </div>
+
+    <div id="draggableDove" title="拖動或點擊我！">🕊️</div>
+
+    <div class="quiz-modal" id="quizModal">
+        <span class="close-x" onclick="closeQuiz()">×</span>
+        <div class="quiz-header" id="quizHeader">⚖️ 生活正義挑戰</div>
+        <div class="quiz-body">
+            <div id="quiz-options-container">
+                <p class="quiz-context">
+                    <strong>情境：</strong>你在社群媒體上看到針對特定族群的仇恨言論或假訊息時，你會？
+                </p>
+                <button class="btn-choice" onclick="handleQuiz(true)">主動進行事實查證並檢舉</button>
+                <button class="btn-choice" onclick="handleQuiz(false)">不予理會，直接滑過</button>
+            </div>
+            <div id="quiz-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 背景化開邏輯 ---
+        function startExplore() {
+            const hero = document.getElementById('hero-layer');
+            const content = document.getElementById('content-layer');
+            const dove = document.getElementById('draggableDove');
+
+            hero.classList.add('fade-out-bg'); // 背景放大淡出
+            
+            setTimeout(() => {
+                content.classList.add('show-content');
+                dove.style.display = 'block';
+                document.body.style.overflow = 'auto'; // 恢復滾動
+            }, 1000);
+        }
+
+        // --- 2. 拖曳與測驗邏輯 ---
+        const dove = document.getElementById('draggableDove');
+        const modal = document.getElementById('quizModal');
+        const header = document.getElementById('quizHeader');
+        const resultDiv = document.getElementById('quiz-result');
+        const optionsDiv = document.getElementById('quiz-options-container');
+
+        function setupDraggable(element, handle) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            let moved = false;
+
+            handle.onmousedown = (e) => {
+                e.preventDefault();
+                moved = false;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                document.onmouseup = () => {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                    if (!moved && element === dove) openQuiz();
+                };
+                
+                document.onmousemove = (e) => {
+                    e.preventDefault();
+                    moved = true;
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+
+                    let newTop = element.offsetTop - pos2;
+                    let newLeft = element.offsetLeft - pos1;
+
+                    // 邊界限制
+                    const maxTop = window.innerHeight - element.offsetHeight;
+                    const maxLeft = window.innerWidth - element.offsetWidth;
+                    newTop = Math.max(0, Math.min(newTop, maxTop));
+                    newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+
+                    element.style.top = newTop + "px";
+                    element.style.left = newLeft + "px";
+                    element.style.bottom = "auto";
+                    element.style.right = "auto";
+                    if(element === modal) element.style.transform = "none";
+                };
+            };
+        }
+
+        function openQuiz() {
+            modal.classList.add('active');
+            optionsDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+        }
+
+        function closeQuiz() { modal.classList.remove('active'); }
+
+        function handleQuiz(isCorrect) {
+            optionsDiv.style.display = 'none';
+            resultDiv.style.display = 'block';
+            if (isCorrect) {
+                resultDiv.style.color = "var(--correct-green)";
+                resultDiv.innerHTML = "✅ 正確！主動監督與查證是維持社會健全制度的第一步。";
+            } else {
+                resultDiv.style.color = "var(--error-red)";
+                resultDiv.innerHTML = "❌ 可惜，冷漠可能讓制度逐漸瓦解，我們都能做得更多。";
+            }
+        }
+
+        setupDraggable(dove, dove);
+        setupDraggable(modal, header);
+    </script>
+</body>
+</html>
