@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG 16 和平正義與健全制度 - 專案提案</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sdg16-blue: #00689D;
+            --light-blue: #e6f2f8;
+            --dark-text: #333;
+            --white: #ffffff;
+            --accent-gold: #C2912E;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- 特殊功能：和平鴿動畫  --- */
+        .dove-animation {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 1000;
+            pointer-events: none;
+            animation: flyAcross 12s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes flyAcross {
+            0% { transform: translate(-100px, 20vh) scaleX(1); }
+            45% { transform: translate(50vw, 10vh) scaleX(1); }
+            50% { transform: translate(51vw, 10vh) scaleX(-1); } /* 轉向 */
+            95% { transform: translate(-50px, 30vh) scaleX(-1); }
+            100% { transform: translate(-100px, 20vh) scaleX(-1); }
+        }
+
+        /* --- 版面配置：Hero 區塊  --- */
+        header {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 104, 157, 0.8), rgba(0, 104, 157, 0.6)), 
+                        url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .scroll-down {
+            margin-top: 50px;
+            padding: 10px 25px;
+            border: 2px solid var(--white);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+
+        .scroll-down:hover {
+            background: var(--white);
+            color: var(--sdg16-blue);
+        }
+
+        /* --- 內容區塊通用樣式 --- */
+        section {
+            padding: 80px 10% ;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--sdg16-blue);
+            margin-bottom: 40px;
+        }
+
+        /* --- 卡片排版  --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--light-blue);
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-bottom: 5px solid var(--sdg16-blue);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- 特殊功能：互動小測驗 [cite: 5, 7] --- */
+        .quiz-box {
+            background: #f9f9f9;
+            border: 2px dashed var(--sdg16-blue);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .btn-choice {
+            background: var(--sdg16-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-choice:hover { background: var(--accent-gold); }
+
+        #quiz-result {
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 1.6em;
+        }
+
+        /* --- 頁尾來源說明  --- */
+        footer {
+            background: #222;
+            color: #ccc;
+            padding: 40px 10%;
+            font-size: 0.9rem;
+        }
+
+        .source-list {
+            margin-top: 10px;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dove-animation">🕊️</div>
+
+    <header>
+        <h1>SDG 16：和平、正義與健全制度</h1>
+        <p>「沒有正義的和平只是壓迫，沒有和平的正義只是復仇。」</p>
+        <a href="#intro" class="scroll-down">開始探索</a>
+    </header>
+
+    <section id="intro">
+        <h2 class="section-title">核心目標與願景</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>減少所有形式的暴力</h3>
+                <p>致力於大幅減少各地的身體、心理及系統性暴力，保護受害者，特別是婦女與兒童。</p>
+            </div>
+            <div class="card">
+                <h3>確保司法平等</h3>
+                <p>促進國內與國際法治，確保不論身分地位，每個人都能獲得公正的司法管道與程序。</p>
+            </div>
+            <div class="card">
+                <h3>建立透明高效的制度</h3>
+                <p>打擊貪腐、賄賂及有組織犯罪，建立可問責且透明的政府服務機構。</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color: #fff;">
+        <h2 class="section-title">創意實踐：生活正義挑戰</h2>
+        <div class="quiz-box">
+            <p id="quiz-question" style="font-size: 1.2rem; margin-bottom: 20px;">
+                <b>情境挑戰：</b>當你在社群媒體上看到針對特定族群的仇恨言論或假訊息時，你會？
+            </p>
+            <div id="quiz-options">
+                <button class="btn-choice" onclick="handleQuiz(false)">不關我的事，直接滑掉</button>
+                <button class="btn-choice" onclick="handleQuiz(true)">查證事實並利用檢舉機制</button>
+            </div>
+            <p id="quiz-result"></p>
+        </div>
+    </section>
+
+    <footer>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+            <div>
+                <h3>關於本專案</h3>
+                <p>期末專題提案報告 - SDG 16 主題研究</p>
+            </div>
+            <div>
+                <h3>內容來源 </h3>
+                <ul class="source-list">
+                    <li>文字資料：聯合國永續發展目標 (UN SDGs) 官網</li>
+                    <li>視覺影像：Unsplash Open Source Library</li>
+                    <li>互動功能：原生 JavaScript 邏輯開發</li>
+                </ul>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;">
+            <p>&copy; 2024 期末專案小組. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 互動測驗邏輯 
+        function handleQuiz(isCorrect) {
+            const resultDisplay = document.getElementById('quiz-result');
+            if (isCorrect) {
+                resultDisplay.style.color = "#28a745";
+                resultDisplay.innerText = "正確！主動監督與查證是維持社會健全制度的第一步。";
+            } else {
+                resultDisplay.style.color = "#dc3545";
+                resultDisplay.innerText = "可惜，冷漠可能讓制度逐漸瓦解，我們都能做得更多。";
+            }
+        }
+
+        // 平滑滾動加強
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
