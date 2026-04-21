@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exercise 20</title>
+
+<style>
+
+/* 外框（灰色背景區塊） */
+.wrapper {
+  margin: 50px;
+  padding: 40px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  width: 600px;
+  position: relative;
+}
+
+/* ===== 表格 ===== */
+table {
+  border-collapse: collapse;
+  width: 200px;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #666;
+  color: white;
+}
+
+/* 指定顏色（精準控制） */
+tr.data1 {
+  background-color: yellow;
+}
+
+tr.data2 {
+  background-color: #ddd;
+}
+
+tr.data3 {
+  background-color: yellow;
+}
+
+/* ===== fixed 區塊 ===== */
+.fixed-box {
+  position: fixed;
+  right: 200px;
+  top: 120px;
+  border: 3px solid green;
+  padding: 15px;
+  width: 160px;
+  background-color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+  <table>
+    <tr>
+      <th>Firstname</th>
+      <th>Lastname</th>
+    </tr>
+    <tr class="data1">
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr class="data2">
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr class="data3">
+      <td>3</td>
+      <td>3</td>
+    </tr>
+  </table>
+</div>
+
+<div class="fixed-box">
+  This div element has position: fixed;
+</div>
+
+</body>
+</html>
