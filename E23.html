@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>UI Match</title>
+
+<style>
+body {
+    font-family: "Roboto", sans-serif;
+    background: #fff;
+    padding: 20px;
+}
+
+
+.container {
+    width: 496px;
+}
+
+
+.main-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 6px 0;
+}
+
+
+.btn {
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f7f7f7;
+    font-size: 13px;
+    color: #212121;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #eee;
+}
+
+
+.detail-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-top: 8px;
+    display: none;
+    overflow: hidden;
+}
+
+
+.detail-header {
+    background: #f6f6f6;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #616161;
+}
+
+
+.detail-list {
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+
+.item {
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #707070;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+.item.active {
+    background: #d8f5d0;
+}
+
+
+.detail-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.detail-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+   
+    <div class="top-bar">
+        <button class="btn" onclick="toggleDetail()">顯示資訊</button>
+    </div>
+
+    
+    <img class="main-img" src="https://picsum.photos/496/240">
+
+    
+    <div class="detail-box" id="detail">
+
+        <div class="detail-header">圖片詳細資訊</div>
+
+        <div class="detail-list">
+            <div class="item active">00197012_01.png</div>
+            <div class="item">00197012_02.png</div>
+            <div class="item">00197012_03.png</div>
+            <div class="item">00197012_04.png</div>
+            <div class="item">00197012_05.png</div>
+            <div class="item">00197012_06.png</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function toggleDetail() {
+    const d = document.getElementById("detail");
+    d.style.display = (d.style.display === "block") ? "none" : "block";
+}
+</script>
+
+</body>
+</html>
