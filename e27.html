@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Responsive Layout</title>
+
+<style>
+body {
+    background: #5fa0d3;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    width: 90%;
+    max-width: 300px;
+}
+
+
+.green {
+    background: #a8c65a;
+    height: 80px;
+}
+
+
+.blue-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.blue {
+    background: #4aa7b5;
+    height: 50px;
+    margin: 5px 0;
+}
+
+
+.gray-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.gray {
+    background: #ccc;
+    height: 40px;
+}
+
+
+@media (min-width: 480px) {
+
+    .container {
+        max-width: 500px;
+    }
+
+    
+    .blue-container {
+        flex-direction: row;
+    }
+
+    .blue {
+        flex: 1;
+        margin: 5px;
+        height: 80px;
+    }
+
+   
+    .gray-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="green"></div>
+
+    <div class="blue-container">
+        <div class="blue"></div>
+        <div class="blue"></div>
+        <div class="blue"></div>
+    </div>
+
+    <div class="gray-container">
+        <div class="gray"></div>
+        <div class="gray"></div>
+        <div class="gray"></div>
+        <div class="gray"></div>
+    </div>
+
+</div>
+
+</body>
+</html>
