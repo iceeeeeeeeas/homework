@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG 16：公平與正義</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --un-blue: #005bbb;
+            --sdg16-blue: #00689D;
+            --text-dark: #333333;
+            --text-gray: #666666;
+            --bg-light: #f9f9f9;
+            --nav-bg: #4a4a4a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* 加入 Noto Sans TC 讓中文字體更美觀 */
+            font-family: 'Roboto', 'Noto Sans TC', Arial, sans-serif;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* --- 最上方小導覽列 (Top Bar) --- */
+        .top-bar {
+            background-color: var(--bg-light);
+            border-bottom: 1px solid #eeeeee;
+            font-size: 12px;
+            padding: 5px 0;
+        }
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            color: var(--text-gray);
+        }
+        .top-bar-links span {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .top-bar-links span:hover { color: var(--un-blue); }
+
+        /* --- 主標頭 (Header) --- */
+        .header-main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .site-title {
+            color: #009EDB;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+        .site-subtitle {
+            font-weight: 300;
+            font-size: 32px;
+            color: #009EDB;
+            letter-spacing: -0.5px;
+        }
+        
+        .search-container {
+            display: flex;
+        }
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-right: none;
+            width: 200px;
+            font-size: 14px;
+        }
+        .search-btn {
+            background-color: #009EDB;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        /* --- 主導覽列 (Navigation) --- */
+        .main-nav {
+            background-color: var(--nav-bg);
+            color: white;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .nav-item {
+            /* 加大 padding 讓四個選項看起來更均勻舒適 */
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border-right: 1px solid #5a5a5a;
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: #333333;
+        }
+        .nav-item.active { background-color: #fcfcfc; color: var(--text-dark); }
+
+        /* --- 主要內容區塊 (Content) --- */
+        .content-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%; 
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        /* SDG 16 橫幅 */
+        .sdg-banner {
+            background-color: var(--sdg16-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            margin-bottom: 30px;
+        }
+        .banner-number {
+            font-size: 100px;
+            font-weight: 900;
+            line-height: 0.8;
+            margin-right: 30px;
+        }
+        .banner-text {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.1;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        .banner-icon {
+            font-size: 80px;
+            opacity: 0.9;
+        }
+
+        /* 文章內容 */
+        .article-text {
+            font-size: 16px;
+            color: #444;
+            max-width: 900px;
+        }
+        .article-text p {
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-container">
+
+        </div>
+    </div>
+
+    <header class="header-main">
+        <div class="logo-area">
+            <div style="display: flex; flex-direction: column;">
+                <span class="site-subtitle">SDGS16</span></span>
+            
+            </div>
+        </div>
+
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-item active">目標</div>
+            <div class="nav-item">時事</div>
+            <div class="nav-item">留言板</div>
+            <div class="nav-item">小測驗</div>
+        </div>
+    </nav>
+
+    <main class="content-container">
+        <h1 class="page-title">SDG 16：公平與正義</h1>
+        
+        <div class="sdg-banner">
+            <div class="banner-number">16</div>
+            <div class="banner-text">PEACE, JUSTICE<br>AND STRONG<br>INSTITUTIONS</div>
+            <div class="banner-icon">🕊️🔨</div>
+        </div>
+
+        <div class="article-text">
+            <p>Goal 16 is about promoting peaceful and inclusive societies, providing access to justice for all and building effective, accountable and inclusive institutions at all levels. People everywhere should be free of fear from all forms of violence and feel safe as they go about their lives whatever their ethnicity, faith or sexual orientation.</p>
+            
+            <p>However, ongoing and new violent conflicts around the world are derailing the global path to peace and achievement of Goal 16. Alarmingly, the year 2022 witnessed a more than 50 per cent increase in conflict-related civilian deaths – the first since the adoption of Agenda 2030 – largely due to the war in Ukraine. In 2024, loss of lives amid armed conflicts surged 40 per cent from 2023, marking the third consecutive annual rise. About four times more children and women were killed in 2023-2024 than in the previous biennium.</p>
+        </div>
+    </main>
+
+</body>
+</html>
