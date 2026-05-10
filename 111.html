@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG 16：公平與正義</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 來自 Ddemo.html.txt 的顏色設定 */
+            --un-blue: #005bbb;
+            --sdg16-blue: #00689D;
+            --text-dark: #333333;
+            --text-gray: #666666;
+            --bg-light: #f9f9f9;
+            --nav-bg: #4a4a4a;
+            /* 來自 Demo.html.txt 的互動顏色 */
+            --white: #ffffff;
+            --correct-green: #28a745;
+            --error-red: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans TC', Arial, sans-serif;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            line-height: 1.6;
+            overflow: hidden; /* 初期鎖定滾動，待開場動畫結束 */
+        }
+
+        /* --- 第一幕：Hero 區塊 (法槌背景) 來自 Demo.html.txt --- */
+        #hero-layer {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 104, 157, 0.7), rgba(0, 104, 157, 0.7)), 
+                        url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            transition: all 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+            z-index: 3000; /* 確保在最上層 */
+        }
+
+        .fade-out-bg {
+            opacity: 0;
+            transform: scale(1.2);
+            pointer-events: none;
+        }
+
+        .start-btn {
+            padding: 12px 35px;
+            border: 2px solid var(--white);
+            color: var(--white);
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            background: transparent;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover { background: var(--white); color: var(--sdg16-blue); }
+
+        /* --- 第二幕：內容層 (整合 Ddemo.html.txt UI) --- */
+        #content-layer {
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        .show-content { opacity: 1 !important; }
+
+        /* --- Ddemo.html.txt 的 UI 樣式 --- */
+        .top-bar { background-color: var(--bg-light); border-bottom: 1px solid #eeeeee; font-size: 12px; padding: 5px 0; }
+        .top-bar-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 20px; color: var(--text-gray); }
+        .header-main { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .site-subtitle { font-weight: 300; font-size: 32px; color: #009EDB; letter-spacing: -0.5px; }
+        .main-nav { background-color: var(--nav-bg); color: white; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; }
+        .nav-item { padding: 15px 35px; font-size: 16px; font-weight: 700; cursor: pointer; border-right: 1px solid #5a5a5a; }
+        .nav-item.active { background-color: #fcfcfc; color: var(--text-dark); }
+        .content-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; }
+        .page-title { font-size: 32px; font-weight: 700; color: #444; margin-bottom: 25px; }
+        .sdg-banner { background-color: var(--sdg16-blue); color: white; display: flex; align-items: center; padding: 20px 40px; margin-bottom: 30px; }
+        .banner-number { font-size: 100px; font-weight: 900; line-height: 0.8; margin-right: 30px; }
+        .banner-text { font-size: 32px; font-weight: 700; line-height: 1.1; flex-grow: 1; max-width: 400px; }
+        .banner-icon { font-size: 80px; opacity: 0.9; }
+        .article-text { font-size: 16px; color: #444; max-width: 900px; }
+
+        /* --- 互動元件樣式 (來自 Demo.html.txt) --- */
+        #draggableDove {
+            position: fixed;
+            bottom: 40px; right: 40px;
+            font-size: 4.5rem;
+            cursor: move;
+            z-index: 2000;
+            display: none;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            user-select: none;
+        }
+
+        .quiz-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 420px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            display: none;
+            z-index: 2001;
+            overflow: hidden;
+        }
+        .quiz-modal.active { display: block; }
+        .quiz-header { padding: 20px; text-align: center; font-size: 1.4rem; font-weight: bold; color: var(--sdg16-blue); border-bottom: 1px solid #eee; cursor: move; }
+        .quiz-body { padding: 30px; text-align: center; }
+        .quiz-context { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #333; }
+        .btn-choice { background: var(--sdg16-blue); color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; cursor: pointer; margin: 8px 0; font-size: 1rem; }
+        #quiz-result { margin-top: 20px; font-weight: bold; display: none; line-height: 1.5; }
+        .close-x { position: absolute; right: 15px; top: 10px; cursor: pointer; font-size: 1.5rem; color: #aaa; z-index: 10; }
+    </style>
+</head>
+<body>
+
+    <div id="hero-layer">
+        <h1>SDG 16：和平與正義</h1>
+        <p>「沒有正義的和平只是壓迫，沒有和平的正義只是復仇。」</p>
+        <button class="start-btn" onclick="startExplore()">開始探索</button>
+    </div>
+
+    <div id="content-layer">
+        <div class="top-bar">
+            <div class="top-bar-container">
+                </div>
+        </div>
+
+        <header class="header-main">
+            <div class="logo-area">
+                <div style="display: flex; flex-direction: column;">
+                    <span class="site-subtitle">SDGS16</span>
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <div class="nav-container">
+                <div class="nav-item active">目標</div>
+                <div class="nav-item">時事</div>
+                <div class="nav-item">留言板</div>
+                <div class="nav-item">小測驗</div>
+            </div>
+        </nav>
+
+        <main class="content-container">
+            <h1 class="page-title">SDG 16：公平與正義</h1>
+            
+            <div class="sdg-banner">
+                <div class="banner-number">16</div>
+                <div class="banner-text">PEACE, JUSTICE<br>AND STRONG<br>INSTITUTIONS</div>
+                <div class="banner-icon">🕊️🔨</div>
+            </div>
+
+            <div class="article-text">
+                <p>Goal 16 is about promoting peaceful and inclusive societies, providing access to justice for all and building effective, accountable and inclusive institutions at all levels. People everywhere should be free of fear from all forms of violence and feel safe as they go about their lives whatever their ethnicity, faith or sexual orientation.</p>
+                
+                <p>However, ongoing and new violent conflicts around the world are derailing the global path to peace and achievement of Goal 16. Alarmingly, the year 2022 witnessed a more than 50 per cent increase in conflict-related civilian deaths – the first since the adoption of Agenda 2030 – largely due to the war in Ukraine. In 2024, loss of lives amid armed conflicts surged 40 per cent from 2023, marking the third consecutive annual rise. About four times more children and women were killed in 2023-2024 than in the previous biennium.</p>
+            </div>
+        </main>
+    </div>
+
+    <div id="draggableDove" title="拖動或點擊我！">🕊️</div>
+
+    <div class="quiz-modal" id="quizModal">
+        <span class="close-x" onclick="closeQuiz()">×</span>
+        <div class="quiz-header" id="quizHeader">⚖️ 生活正義挑戰</div>
+        <div class="quiz-body">
+            <div id="quiz-options-container">
+                <p class="quiz-context">
+                    <strong>情境：</strong>你在社群媒體上看到針對特定族群的仇恨言論或假訊息時，你會？
+                </p>
+                <button class="btn-choice" onclick="handleQuiz(true)">主動進行事實查證並檢舉</button>
+                <button class="btn-choice" onclick="handleQuiz(false)">不予理會，直接滑過</button>
+            </div>
+            <div id="quiz-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 背景化開與內容顯示邏輯 (來自 Demo.html.txt) ---
+        function startExplore() {
+            const hero = document.getElementById('hero-layer');
+            const content = document.getElementById('content-layer');
+            const dove = document.getElementById('draggableDove');
+
+            hero.classList.add('fade-out-bg');
+            
+            setTimeout(() => {
+                content.classList.add('show-content');
+                dove.style.display = 'block';
+                document.body.style.overflow = 'auto'; // 恢復滾動
+            }, 1000);
+        }
+
+        // --- 2. 拖曳與測驗邏輯 (來自 Demo.html.txt) ---
+        const dove = document.getElementById('draggableDove');
+        const modal = document.getElementById('quizModal');
+        const header = document.getElementById('quizHeader');
+        const resultDiv = document.getElementById('quiz-result');
+        const optionsDiv = document.getElementById('quiz-options-container');
+
+        function setupDraggable(element, handle) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            let moved = false;
+
+            handle.onmousedown = (e) => {
+                e.preventDefault();
+                moved = false;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                document.onmouseup = () => {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                    if (!moved && element === dove) openQuiz();
+                };
+                
+                document.onmousemove = (e) => {
+                    e.preventDefault();
+                    moved = true;
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+
+                    let newTop = element.offsetTop - pos2;
+                    let newLeft = element.offsetLeft - pos1;
+
+                    const maxTop = window.innerHeight - element.offsetHeight;
+                    const maxLeft = window.innerWidth - element.offsetWidth;
+                    newTop = Math.max(0, Math.min(newTop, maxTop));
+                    newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+
+                    element.style.top = newTop + "px";
+                    element.style.left = newLeft + "px";
+                    element.style.bottom = "auto";
+                    element.style.right = "auto";
+                    if(element === modal) element.style.transform = "none";
+                };
+            };
+        }
+
+        function openQuiz() {
+            modal.classList.add('active');
+            optionsDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+        }
+
+        function closeQuiz() { modal.classList.remove('active'); }
+
+        function handleQuiz(isCorrect) {
+            optionsDiv.style.display = 'none';
+            resultDiv.style.display = 'block';
+            if (isCorrect) {
+                resultDiv.style.color = "var(--correct-green)";
+                resultDiv.innerHTML = "✅ 正確！主動監督與查證是維持社會健全制度的第一步。";
+            } else {
+                resultDiv.style.color = "var(--error-red)";
+                resultDiv.innerHTML = "❌ 可惜，冷漠可能讓制度逐漸瓦解，我們都能做得更多。";
+            }
+        }
+
+        setupDraggable(dove, dove);
+        setupDraggable(modal, header);
+    </script>
+</body>
+</html>
