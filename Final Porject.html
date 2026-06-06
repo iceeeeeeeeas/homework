@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG 16：公平與正義</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --un-blue: #005bbb;
+            --sdg16-blue: #00689D;
+            --sdg16-teal: #00a3d6;
+            --text-dark: #1f2937;
+            --text-gray: #566573;
+            --bg-light: #f2f7fb;
+            --surface: #ffffff;
+            --surface-soft: #f8fbff;
+            --nav-shadow: rgba(0, 0, 0, 0.08);
+            --correct-green: #28a745;
+            --error-red: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans TC', Arial, sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(180deg, #eef5fb 0%, #f8fbff 55%, #ffffff 100%);
+            line-height: 1.7;
+            overflow: hidden;
+        }
+
+        #hero-layer {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 104, 157, 0.75), rgba(0, 104, 157, 0.65)),
+                        url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 24px;
+            transition: all 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+            z-index: 3000;
+        }
+
+        #hero-layer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(255,255,255,0.12), transparent 45%);
+            pointer-events: none;
+        }
+
+        #hero-layer h1 {
+            font-size: clamp(3rem, 5vw, 5.2rem);
+            line-height: 1.02;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.9rem;
+            text-shadow: 0 18px 35px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+        }
+
+        #hero-layer p {
+            font-size: clamp(1rem, 1.3vw, 1.4rem);
+            max-width: 720px;
+            margin: 0 auto;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .start-btn {
+            margin-top: 28px;
+            padding: 16px 44px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #00a3d6, #00689d);
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 18px 39px rgba(0, 106, 157, 0.28);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 48px rgba(0, 106, 157, 0.32);
+            opacity: 0.98;
+        }
+
+        .fade-out-bg {
+            opacity: 0;
+            transform: scale(1.12);
+            pointer-events: none;
+        }
+
+        #content-layer {
+            opacity: 0;
+            transition: opacity 1.6s ease;
+        }
+
+        .show-content {
+            opacity: 1 !important;
+        }
+
+        .top-bar {
+            background: rgba(255,255,255,0.92);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(12px);
+            font-size: 0.92rem;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1500;
+        }
+
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 0 20px;
+            color: var(--text-gray);
+        }
+
+        .top-bar-item {
+            display: inline-flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .top-bar-item strong {
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .header-main {
+            max-width: 1200px;
+            margin: 16px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .site-subtitle {
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--sdg16-blue);
+            letter-spacing: -0.05em;
+        }
+
+        .site-tagline {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-top: 6px;
+        }
+
+        .main-nav {
+            background: rgba(255,255,255,0.95);
+            border-radius: 999px;
+            padding: 10px 18px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.05);
+            margin: 0 20px;
+            position: sticky;
+            top: 68px;
+            z-index: 1400;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 12px 24px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 999px;
+            color: var(--text-gray);
+            background: rgba(242, 247, 251, 0.95);
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-1px);
+            background: rgba(0, 163, 214, 0.1);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #00689d, #00a3d6);
+            color: white;
+            box-shadow: 0 14px 32px rgba(0, 106, 157, 0.18);
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 30px auto 80px;
+            padding: 30px;
+            width: 100%;
+            background: rgba(255,255,255,0.98);
+            border-radius: 32px;
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.08);
+        }
+
+        .page-title {
+            font-size: clamp(2.1rem, 3vw, 3.4rem);
+            font-weight: 800;
+            color: #152736;
+            margin-bottom: 20px;
+        }
+
+        .sdg-banner {
+            background: linear-gradient(135deg, #00689d, #009fd6);
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            border-radius: 24px;
+            box-shadow: 0 18px 45px rgba(0, 104, 157, 0.18);
+        }
+
+        .banner-number {
+            font-size: clamp(4.2rem, 8vw, 6.5rem);
+            font-weight: 900;
+            line-height: 0.9;
+            margin-right: 20px;
+        }
+
+        .banner-text {
+            font-size: clamp(1.4rem, 2vw, 2.3rem);
+            font-weight: 800;
+            line-height: 1.05;
+            flex: 1 1 320px;
+            max-width: 560px;
+        }
+
+        .banner-icon {
+            font-size: 3.6rem;
+            opacity: 0.95;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 84px;
+            min-height: 84px;
+        }
+
+        .article-text {
+            font-size: 1rem;
+            color: #3d4a59;
+            max-width: 980px;
+            line-height: 1.85;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-section {
+            margin-top: 42px;
+        }
+
+        .dashboard-title {
+            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+            font-weight: 800;
+            color: #152736;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 28px;
+            padding: 26px;
+            box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 46px rgba(15, 23, 42, 0.14);
+        }
+
+        .chart-title {
+            font-size: 0.98rem;
+            color: #556776;
+            margin-bottom: 20px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .chart-graphic {
+            display: grid;
+            place-items: center;
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .chart-svg {
+            width: 140px;
+            height: 140px;
+        }
+
+        .chart-ring-bg {
+            fill: none;
+            stroke: #e3eef9;
+            stroke-width: 14;
+        }
+
+        .chart-ring-circle {
+            fill: none;
+            stroke: #00a3d6;
+            stroke-width: 14;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1.4s ease;
+        }
+
+        .chart-value {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0d3d70;
+            text-align: center;
+            width: 100%;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .chart-subtitle {
+            font-size: 0.98rem;
+            color: #536776;
+            margin-bottom: 14px;
+        }
+
+        .chart-note {
+            font-size: 0.95rem;
+            color: #5f6d7a;
+            line-height: 1.7;
+        }
+
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .page-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        .news-card-image {
+            width: 100%;
+            min-height: 220px;
+            background: linear-gradient(135deg, rgba(0,163,214,0.92), rgba(0,104,157,0.96));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.3rem;
+        }
+
+        .news-card-content {
+            padding: 24px;
+        }
+
+        .news-date {
+            font-size: 0.85rem;
+            color: #7a8a9d;
+            margin-bottom: 10px;
+        }
+
+        .news-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #152736;
+            margin-bottom: 12px;
+            line-height: 1.45;
+        }
+
+        .news-description {
+            font-size: 0.96rem;
+            color: #566673;
+            margin-bottom: 18px;
+            line-height: 1.75;
+        }
+
+        .news-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: #00689d;
+            color: white;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .news-link:hover {
+            background: #00507d;
+            transform: translateY(-1px);
+        }
+
+        .message-board {
+            background: #f7fbff;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 26px;
+            padding: 28px;
+            box-shadow: 0 16px 38px rgba(15,23,42,0.06);
+        }
+
+        .message-form {
+            display: grid;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .message-input,
+        .message-textarea {
+            width: 100%;
+            border: 1px solid rgba(86, 103, 115, 0.18);
+            border-radius: 16px;
+            padding: 16px 18px;
+            font-size: 1rem;
+            color: #24314d;
+            background: white;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .message-input:focus,
+        .message-textarea:focus {
+            outline: none;
+            border-color: #00a3d6;
+            box-shadow: 0 0 0 4px rgba(0,163,214,0.12);
+        }
+
+        .message-textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: fit-content;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 999px;
+            color: white;
+            background: linear-gradient(135deg, #00689d, #00a3d6);
+            box-shadow: 0 14px 34px rgba(0,106,157,0.18);
+            cursor: pointer;
+            transition: transform 0.25s ease, filter 0.25s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+
+        .message-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 10px 22px rgba(15,23,42,0.06);
+        }
+
+        .message-card strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #0d3557;
+            font-size: 1rem;
+        }
+
+        .message-card p {
+            color: #4c5c6f;
+            line-height: 1.7;
+        }
+
+        .message-card time {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #7b8b9a;
+        }
+
+        .mission-intro {
+            background: #eef7ff;
+            border: 1px solid rgba(0, 106, 157, 0.12);
+            border-radius: 24px;
+            padding: 26px;
+            margin-bottom: 24px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+        }
+
+        .mission-intro p,
+        .quiz-tips p {
+            font-size: 1rem;
+            color: #304155;
+            margin-bottom: 16px;
+        }
+
+        .mission-start {
+            width: fit-content;
+            padding: 14px 28px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #00689d, #00a3d6);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .mission-start:hover {
+            transform: translateY(-1px);
+        }
+
+        .quiz-tips {
+            font-size: 0.96rem;
+            color: #5b6d82;
+        }
+
+        .game-panel {
+            background: white;
+            border: 1px solid rgba(0, 106, 157, 0.12);
+            border-radius: 28px;
+            padding: 26px;
+            margin-top: 20px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .game-status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .game-stat {
+            background: #f2f9ff;
+            border: 1px solid rgba(0, 106, 157, 0.16);
+            border-radius: 18px;
+            padding: 16px 20px;
+            min-width: 160px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #5b6d82;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #152736;
+        }
+
+        .game-question {
+            font-size: 1.05rem;
+            color: #24314d;
+            line-height: 1.85;
+            margin-bottom: 22px;
+        }
+
+        .game-options {
+            display: grid;
+            gap: 14px;
+        }
+
+        .game-result {
+            min-height: 58px;
+            margin-top: 20px;
+            padding: 18px 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 163, 214, 0.1), rgba(0, 104, 157, 0.06));
+            color: #0f2f52;
+            font-weight: 700;
+            line-height: 1.6;
+            border: 1px solid rgba(0, 106, 157, 0.14);
+            box-shadow: 0 18px 40px rgba(0, 104, 157, 0.08);
+        }
+
+        .game-footer {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            margin-top: 26px;
+        }
+
+        .game-footer .mission-start {
+            min-width: 130px;
+        }
+
+        .game-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: space-between;
+            align-items: center;
+            margin: 18px 0 12px;
+            padding: 18px 20px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(0, 104, 157, 0.08), rgba(0, 163, 214, 0.08));
+        }
+
+        .mission-current {
+            font-size: 1rem;
+            color: #0f2f52;
+            font-weight: 700;
+            flex: 1 1 320px;
+        }
+
+        .mission-combo {
+            font-size: 0.95rem;
+            color: #014b76;
+            font-weight: 700;
+            background: rgba(255,255,255,0.9);
+            border-radius: 16px;
+            padding: 10px 14px;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+        }
+
+        .mission-combo span {
+            color: #00689d;
+        }
+
+        .game-board {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: 1fr 1.7fr;
+            align-items: start;
+        }
+
+        @media (max-width: 880px) {
+            .game-board {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .action-pool {
+            background: #eef8ff;
+            border: 1px solid rgba(0, 106, 157, 0.16);
+            border-radius: 24px;
+            padding: 20px;
+            min-height: 320px;
+            display: grid;
+            gap: 14px;
+            align-content: start;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            cursor: grab;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            animation: float-card 8s ease-in-out infinite;
+        }
+
+        .action-card:active {
+            cursor: grabbing;
+            transform: scale(0.98);
+            animation-play-state: paused;
+        }
+
+        .action-card.locked {
+            opacity: 0.85;
+            cursor: default;
+            border-color: rgba(0, 163, 214, 0.3);
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+            animation: none;
+        }
+
+        @keyframes float-card {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .drop-zones {
+            display: grid;
+            gap: 16px;
+        }
+
+        .drop-zone {
+            background: #f7fbff;
+            border: 2px dashed rgba(0, 106, 157, 0.16);
+            border-radius: 24px;
+            padding: 22px;
+            min-height: 120px;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .drop-zone.active {
+            background: rgba(0, 163, 214, 0.08);
+            border-color: #00a3d6;
+        }
+
+        .drop-zone h3 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #0f2f52;
+        }
+
+        .drop-zone p {
+            color: #556776;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .drop-zone .zone-content {
+            display: grid;
+            gap: 12px;
+        }
+
+        .drop-zone[data-state="correct"] {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.08);
+            animation: pulse-zone 0.9s ease;
+        }
+
+        .drop-zone[data-state="incorrect"] {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.08);
+            animation: pulse-zone-err 0.9s ease;
+        }
+
+        @keyframes pulse-zone {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulse-zone-err {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            50% { transform: translateX(4px); }
+            75% { transform: translateX(-2px); }
+            100% { transform: translateX(0); }
+        }
+
+        .drop-zone .zone-note {
+            font-size: 0.92rem;
+            color: #7a8b9c;
+        }
+
+        #draggableDove {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            font-size: 4.8rem;
+            cursor: move;
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.24));
+            user-select: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #draggableDove.fly-in {
+            display: block;
+            opacity: 1;
+            animation: dove-fly-in 1.8s ease-out forwards;
+        }
+
+        #draggableDove.show-dove {
+            display: block;
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+            animation: dove-float 6s ease-in-out infinite;
+        }
+
+        @keyframes dove-fly-in {
+            0% {
+                opacity: 0;
+                transform: translate(180vw, -90vh) scale(0.5) rotate(-60deg);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translate(130vw, -70vh) scale(0.65) rotate(-45deg);
+            }
+
+            45% {
+                opacity: 1;
+                transform: translate(80vw, -35vh) scale(0.85) rotate(-25deg);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translate(35vw, -12vh) scale(0.97) rotate(-10deg);
+            }
+
+            90% {
+                opacity: 1;
+                transform: translate(8vw, -2vh) scale(1.02) rotate(-2deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes dove-float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(0, -10px) scale(1.03);
+            }
+        }
+
+        /* 決策模擬器遊戲樣式 */
+        .decision-game-container {
+            position: relative;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .game-header {
+            background: linear-gradient(135deg, #00689d, #00a3d6);
+            color: white;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .game-header h2 {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .game-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .game-dashboard {
+            padding: 24px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .game-stat-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .game-stat-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .game-stat-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            width: 70px;
+            flex-shrink: 0;
+        }
+
+        .game-progress-wrapper {
+            flex-grow: 1;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .game-progress-bar {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.5s ease, background-color 0.3s ease;
+        }
+
+        .game-progress-peace { background: #27ae60; }
+        .game-progress-justice { background: #8e44ad; }
+        .game-progress-inst { background: #f39c12; }
+
+        .game-play-area {
+            padding: 24px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .game-card {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .game-card.fade-out {
+            transform: translateY(-20px) scale(0.95);
+            opacity: 0;
+        }
+
+        .game-card.fade-in {
+            animation: gameCardSlideIn 0.4s forwards;
+        }
+
+        @keyframes gameCardSlideIn {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .game-card-tag {
+            font-size: 12px;
+            color: #00689d;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: inline-block;
+            background: rgba(0, 104, 157, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .game-card-text {
+            font-size: 16px;
+            color: #2c3e50;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+
+        .game-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-game-choice {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .btn-game-choice:hover {
+            border-color: #00689d;
+            background: #f1f5f9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 104, 157, 0.1);
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 30px;
+            text-align: center;
+            transition: opacity 0.5s ease;
+            border-radius: 16px;
+        }
+
+        .game-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .game-overlay h3 {
+            font-size: 24px;
+            color: #00689d;
+            margin-bottom: 12px;
+        }
+
+        .game-overlay p {
+            font-size: 14px;
+            color: #566573;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .game-turn-selection {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .game-turn-selection label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .game-turn-selection select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #00689d;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .btn-game-primary {
+            background: linear-gradient(135deg, #00689d, #00a3d6);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 104, 157, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .btn-game-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 25px rgba(0, 104, 157, 0.4);
+        }
+
+        .game-turn-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div id="hero-layer">
+        <h1>SDG 16：和平與正義</h1>
+        <p>「沒有正義的和平只是壓迫，沒有和平的正義只是復仇。」</p>
+        <button class="start-btn" onclick="startExplore()">開始探索</button>
+    </div>
+
+    <div id="content-layer">
+        <div class="top-bar">
+            <div class="top-bar-container">
+                <div class="top-bar-item"><strong>SDG16</strong> 專題：公平與正義</div>
+                <div class="top-bar-item">2026 年度永續發展目標學習專案</div>
+            </div>
+        </div>
+
+        <header class="header-main">
+            <div class="logo-area">
+                <div style="display: flex; flex-direction: column;">
+                    <span class="site-subtitle">SDG 16</span>
+                    <span class="site-tagline">推動和平、強化制度、守護正義</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- dashboard -->
+
+        <nav class="main-nav">
+            <div class="nav-container">
+                <div class="nav-item active" data-page="page-goal">目標</div>
+                <div class="nav-item" data-page="page-news">時事</div>
+                <div class="nav-item" data-page="page-message">留言板</div>
+                <div class="nav-item" data-page="page-quiz">小遊戲</div>
+            </div>
+        </nav>
+
+        <main class="content-container">
+            <!-- 目標頁面 -->
+            <div id="page-goal" class="page-section active">
+                <h1 class="page-title">SDG 16：公平與正義</h1>
+                
+                <div class="sdg-banner">
+                    <div class="banner-number">16</div>
+                    <div class="banner-text">PEACE, JUSTICE<br>AND STRONG<br>INSTITUTIONS</div>
+                    <div class="banner-icon">🕊️🔨</div>
+                </div>
+
+            <div class="article-text">
+                    <h2>SDG 16：和平、正義與健全制度</h2>
+
+                    <p>
+                        永續發展目標第16項（SDG 16）旨在促進和平且包容的社會，確保所有人都能公平地獲得司法資源，並在各層級建立具效能、透明且負責任的制度。
+                        所有人都應免於暴力威脅，並在日常生活中感受到安全保障，不論其種族、宗教、性別或任何身份背景。
+                    </p>
+                    <br>
+                    <p>
+                        然而，全球持續發生的武裝衝突與新興戰爭嚴重破壞了和平進程，使 SDG 16 的達成面臨挑戰。
+                        近年來，衝突相關的平民傷亡明顯上升，例如 2022 年較前一年增加超過 50%，而 2024 年的武裝衝突死亡人數又較 2023 年增加約 40%，呈現連續上升趨勢。
+                        其中婦女與兒童在衝突中的受害比例顯著提高，顯示全球和平與保護機制仍有待強化。
+                    </p>
+                </div>
+
+                <div class="sdg-goals">
+                <h2>SDG 16 細項目標:</h2>
+
+                    <ul>
+                        <li><b>16.1</b> 在全球大幅減少各種形式的暴力及相關死亡率。</li>
+
+                        <li><b>16.2</b> 終止對兒童的虐待、剝削、人口販運及一切形式的暴力與酷刑。</li>
+
+                        <li><b>16.3</b> 促進法治，確保所有人平等獲得司法救助。</li>
+
+                        <li><b>16.4</b> 大幅減少非法資金流動、武器販運及腐敗行為。</li>
+
+                        <li><b>16.5</b> 顯著降低各種形式的貪腐與賄賂。</li>
+
+                        <li><b>16.6</b> 發展有效、負責任且透明的公共機構。</li>
+
+                        <li><b>16.7</b> 確保各層級決策具備包容性、參與性與代表性。</li>
+
+                        <li><b>16.8</b> 擴大發展中國家在全球治理機構中的參與。</li>
+
+                        <li><b>16.9</b> 提供全民法律身份，包括出生登記。</li>
+
+                        <li><b>16.10</b> 保障資訊取得與基本自由，並保護新聞自由。</li>
+                        <br>
+                        <hr>
+                        <br>
+                    </ul>
+                </div>
+
+                <div class="max-w-5xl mx-auto">
+        <!-- 頂部標題與控制區 -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight">SDG 16 數據儀表板</h1>
+                <p class="text-slate-500 mt-1">和平、正義與強大機構的全球發展現況</p>
+            </div>
+            
+            <div class="w-full md:w-auto">
+                <label for="indicator-select" class="sr-only">選擇指標</label>
+                <select id="indicator-select" class="w-full bg-white border border-slate-300 text-slate-700 py-2.5 px-4 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow font-medium cursor-pointer">
+                    <option value="cpi">2025年 清廉印象指數 (CPI)</option>
+                    <option value="gpi">2025年 全球和平指數 (GPI)</option>
+                    <option value="homicide">每十萬人兇殺率</option>
+                    <option value="detainees">未判決羈押比例 (%)</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- KPI 數據卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- 平均值卡片 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 relative overflow-hidden group">
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-l-xl"></div>
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">所選國家平均數值</h3>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="avg-value" class="text-4xl font-extrabold text-slate-800">--</span>
+                </div>
+            </div>
+
+            <!-- 指標說明卡片 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 relative overflow-hidden group">
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500 rounded-l-xl"></div>
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">指標定義</h3>
+                <p id="indicator-desc" class="mt-2 text-slate-600 leading-relaxed text-sm">
+                    請選擇指標以查看說明。
+                </p>
+            </div>
+        </div>
+
+        <!-- 圖表展示區 -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+            <div class="relative h-[400px] w-full">
+                <canvas id="sdgChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- 時事頁面 -->
+            <div id="page-news" class="page-section">
+                <h1 class="page-title">時事新聞</h1>
+                
+                <div class="sdg-banner">
+                    <div class="banner-text">與 SDG16 相關的最新新聞</div>
+                    <div class="banner-icon">📰</div>
+                </div>
+
+                <div class="news-grid">
+                    <div class="news-card">
+                        <div class="news-card-image">🕊️</div>
+                        <div class="news-card-content">
+                            <div class="news-date">2025年</div>
+                            <div class="news-title">全球和平指數 2025</div>
+                            <div class="news-description">2025年全球和平現況追蹤，檢視各國在衝突解決與和平建設中的最新進展。</div>
+                            <a href="https://www.visionofhumanity.org/maps/#/" target="_blank" class="news-link">閱讀更多</a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-card-image">⚖️</div>
+                        <div class="news-card-content">
+                            <div class="news-date">2026年4月</div>
+                            <div class="news-title">61st聯合國人權理事會新決議</div>
+                            <div class="news-description">2026年人權理事會最新決議，推進全球司法正義與人權保護。</div>
+                            <a href="https://www.ohchr.org/en/press-releases/2026/04/human-rights-council-concludes-sixty-first-regular-session-after-adopting-38" target="_blank" class="news-link">閱讀更多</a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-card-image">🏛️</div>
+                        <div class="news-card-content">
+                            <div class="news-date">2026年3月</div>
+                            <div class="news-title">國際刑事法院 2026 進展</div>
+                            <div class="news-description">國際刑事法院在追捕戰爭罪犯與保護平民中的最新行動。</div>
+                            <a href="https://www.icc-cpi.int/" target="_blank" class="news-link">閱讀更多</a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-card-image">🌍</div>
+                        <div class="news-card-content">
+                            <div class="news-date">2026年2月</div>
+                            <div class="news-title">聯合國 SDG 2026 進度報告</div>
+                            <div class="news-description">2026年永續發展目標進度追蹤，SDG 16 在全球推進中的最新成果。</div>
+                            <a href="https://unstats.un.org/sdgs/" target="_blank" class="news-link">閱讀更多</a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-card-image">👥</div>
+                        <div class="news-card-content">
+                            <div class="news-date">2025年12月</div>
+                            <div class="news-title">2025 全球廉政指數發布</div>
+                            <div class="news-description">2025年全球各國反貪腐措施成效與廉政建設的最新評比。</div>
+                            <a href="https://www.transparency.org/" target="_blank" class="news-link">閱讀更多</a>
+                        </div>
+                    </div>
+
+                    <div class="news-card">
+                        <div class="news-card-image">📢</div>
+                        <div class="news-card-content">
+                            <div class="news-date">2025年11月</div>
+                            <div class="news-title">2025 民主治理與言論自由</div>
+                            <div class="news-description">世界民主指數 2025 發布，檢視全球民主進程與言論自由現況。</div>
+                            <a href="https://www.v-dem.net/" target="_blank" class="news-link">閱讀更多</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-message" class="page-section">
+                <h1 class="page-title">留言板</h1>
+
+                <div class="sdg-banner">
+                    <div class="banner-text">與大家分享你對和平與正義的看法</div>
+                    <div class="banner-icon">💬</div>
+                </div>
+
+                <div class="message-board">
+                    <form id="messageForm" class="message-form">
+                        <input type="text" id="messageName" class="message-input" placeholder="你的名字" required>
+                        <input type="email" id="messageEmail" class="message-input" placeholder="電子郵件（選填）">
+                        <textarea id="messageText" class="message-textarea" placeholder="寫下你的想法..." required></textarea>
+                        <button type="submit" class="submit-btn">送出留言</button>
+                    </form>
+                    <div class="message-list" id="messageList">
+                        <div class="message-card">
+                            <strong>系統提示</strong>
+                            <p>歡迎留言！分享你的看法，讓更多人了解公平與正義的重要性。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-quiz" class="page-section">
+                <h1 class="page-title">決策模擬器：正義的重量</h1>
+
+                <div class="sdg-banner">
+                    <div class="banner-text">在和平、正義與廉能之間取得平衡</div>
+                    <div class="banner-icon">⚖️</div>
+                </div>
+
+                <div class="decision-game-container" id="decisionGameContainer">
+                    <!-- 遊戲標題區 -->
+                    <div class="game-header">
+                        <h2>⚖️ 決策模擬器</h2>
+                        <p>SDG 16：和平、正義與健全制度</p>
+                    </div>
+
+                    <!-- 狀態儀表板 -->
+                    <div class="game-dashboard">
+                        <div class="game-stat-row">
+                            <span class="game-stat-label">🕊️ 和平</span>
+                            <div class="game-progress-wrapper"><div class="game-progress-bar game-progress-peace" id="game-bar-peace" style="width: 50%;"></div></div>
+                        </div>
+                        <div class="game-stat-row">
+                            <span class="game-stat-label">⚖️ 正義</span>
+                            <div class="game-progress-wrapper"><div class="game-progress-bar game-progress-justice" id="game-bar-justice" style="width: 50%;"></div></div>
+                        </div>
+                        <div class="game-stat-row">
+                            <span class="game-stat-label">🏛️ 廉能</span>
+                            <div class="game-progress-wrapper"><div class="game-progress-bar game-progress-inst" id="game-bar-institution" style="width: 50%;"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- 主要遊玩區 -->
+                    <div class="game-play-area">
+                        <div id="game-card" class="game-card">
+                            <span id="game-card-tag" class="game-card-tag">突發事件</span>
+                            <div id="game-card-text" class="game-card-text">載入中...</div>
+                        </div>
+
+                        <div class="game-actions">
+                            <button class="btn-game-choice" id="btn-game-opt1" onclick="makeDecision(1)">選項 1</button>
+                            <button class="btn-game-choice" id="btn-game-opt2" onclick="makeDecision(2)">選項 2</button>
+                        </div>
+
+                        <div id="game-turn-counter" class="game-turn-counter">第 1 / 10 年</div>
+                    </div>
+
+                    <!-- 開始畫面 -->
+                    <div id="game-start-screen" class="game-overlay">
+                        <h3>正義的重量</h3>
+                        <p>歡迎來到 SDG 16 決策模擬器。
+                            <br>
+                            您是一位高貴的掌權者，所有的國家政策、行為 都必須有您的許可才能行動
+                            <br>
+                            您必須在「社會和平」、「司法正義」與「機構廉能」之間取得平衡。如有任何一項指標歸零，您的政府就會垮台。
+                        </p>
+                        
+                        <div class="game-turn-selection">
+                            <label for="game-year-select">請選擇您的任期難度：</label>
+                            <select id="game-year-select">
+                                <option value="5">5 年 (短期挑戰 - 簡單)</option>
+                                <option value="10" selected>10 年 (標準任期 - 普通)</option>
+                                <option value="20">20 年 (長期抗戰 - 困難)</option>
+                                <option value="30">30 年 (終身任期 - 惡夢)</option>
+                                <optgroup label="特別挑戰">
+                                    <option value="999">無限期 (無盡挑戰 - ???)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <button class="btn-game-primary" onclick="startDecisionGame()">宣誓就職</button>
+                    </div>
+
+                    <!-- 結束畫面 -->
+                    <div id="game-end-screen" class="game-overlay hidden">
+                        <h3 id="game-end-title">遊戲結束</h3>
+                        <p id="game-end-desc"></p>
+                        <button class="btn-game-primary" onclick="showDecisionGameStart()">返回主畫面</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="draggableDove" title="拖動或點擊我！">🕊️</div>
+
+    <script>
+        // --- 0. 頁面導航邏輯 ---
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
+                
+                // 隱藏所有頁面
+                document.querySelectorAll('.page-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // 移除所有導航項的 active 狀態
+                navItems.forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // 顯示選中的頁面
+                if (pageId && document.getElementById(pageId)) {
+                    document.getElementById(pageId).classList.add('active');
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // --- 1. 背景化開與內容顯示邏輯  ---
+        function startExplore() {
+            const hero = document.getElementById('hero-layer');
+            const content = document.getElementById('content-layer');
+            const dove = document.getElementById('draggableDove');
+
+            // 開始鴿子飛入動畫
+            dove.classList.add('fly-in');
+            
+            // 在飛入的中途開始展開內容
+            setTimeout(() => {
+                hero.classList.add('fade-out-bg');
+                content.classList.add('show-content');
+            }, 800);
+            
+            // 飛入動畫完成後，切換到漂浮動畫
+            setTimeout(() => {
+                dove.classList.remove('fly-in');
+                dove.classList.add('show-dove');
+                document.body.style.overflow = 'auto'; // 恢復滾動
+                animateDashboardCounters();
+            }, 3000);
+        }
+
+        function animateDashboardCounters() {
+            const rings = document.querySelectorAll('.chart-ring-circle');
+            const values = document.querySelectorAll('.chart-value');
+
+            rings.forEach(circle => {
+                const radius = +circle.getAttribute('r');
+                const circumference = 2 * Math.PI * radius;
+                const target = +circle.getAttribute('data-target');
+                circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                circle.style.strokeDashoffset = circumference;
+                setTimeout(() => {
+                    const offset = circumference - (target / 100) * circumference;
+                    circle.style.strokeDashoffset = offset;
+                }, 200);
+            });
+
+            values.forEach(el => {
+                const target = +el.getAttribute('data-target');
+                let current = 0;
+                const step = Math.max(1, Math.floor(target / 50));
+                const interval = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    el.textContent = `${current}%`;
+                }, 25);
+            });
+        }
+
+        // --- 2. 拖曳與互動任務邏輯  ---
+        const dove = document.getElementById('draggableDove');
+
+        const categoryList = [
+            {
+                id: 'peace',
+                title: '和平行動',
+                description: '促進理解、包容與社區和諧的實際做法。'
+            },
+            {
+                id: 'justice',
+                title: '司法保障',
+                description: '維護公正與法治，讓每個人都能獲得公平對待。'
+            },
+            {
+                id: 'integrity',
+                title: '透明治理',
+                description: '提升公開性、誠信和反貪腐行動的實踐。'
+            }
+        ];
+
+        const gameData = [
+            {
+                id: 'card1',
+                text: '在社群平台上分享經過查證的新聞資料。',
+                category: 'integrity'
+            },
+            {
+                id: 'card2',
+                text: '看到有人被排擠，主動邀請他加入活動。',
+                category: 'peace'
+            },
+            {
+                id: 'card3',
+                text: '協助受害者取得法律支援，保障權利。',
+                category: 'justice'
+            },
+            {
+                id: 'card4',
+                text: '鼓勵大家尊重不同意見，保持理性溝通。',
+                category: 'peace'
+            }
+        ];
+
+        let gameCompleted = 0;
+        let gamePoints = 0;
+        let gameStreak = 0;
+        let placedCards = {};
+
+        let gameTimer = null;
+        let missionTimeLeft = 45;
+
+        function startMission() {
+            document.getElementById('missionIntro').classList.add('hidden');
+            document.getElementById('gamePanel').classList.remove('hidden');
+            document.getElementById('resetMissionBtn').classList.add('hidden');
+            gameCompleted = 0;
+            gamePoints = 0;
+            gameStreak = 0;
+            placedCards = {};
+            missionTimeLeft = 45;
+            renderGameBoard();
+            updateStats();
+            updateTimerDisplay();
+            document.getElementById('gameQuest').textContent = '任務：45 秒內協助行動卡找到它的正義地圖位置。';
+            document.getElementById('gameResult').textContent = '任務開始！搶在時間內完成所有配對。';
+
+            if (gameTimer) {
+                clearInterval(gameTimer);
+            }
+            gameTimer = setInterval(() => {
+                missionTimeLeft -= 1;
+                updateTimerDisplay();
+                if (missionTimeLeft <= 0) {
+                    clearInterval(gameTimer);
+                    endMission(false);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('gameTime').textContent = `${missionTimeLeft}s`;
+        }
+
+        function renderGameBoard() {
+            const actionPool = document.getElementById('actionPool');
+            const dropZones = document.getElementById('dropZones');
+            actionPool.innerHTML = '';
+            dropZones.innerHTML = '';
+
+            const shuffled = [...gameData].sort(() => Math.random() - 0.5);
+            shuffled.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'action-card';
+                card.textContent = item.text;
+                card.setAttribute('draggable', 'true');
+                card.dataset.cardId = item.id;
+                card.addEventListener('dragstart', handleDragStart);
+                actionPool.appendChild(card);
+            });
+
+            categoryList.forEach(category => {
+                const zone = document.createElement('div');
+                zone.className = 'drop-zone';
+                zone.dataset.zone = category.id;
+                zone.innerHTML = `
+                    <h3>${category.title}</h3>
+                    <p>${category.description}</p>
+                    <div class="zone-content"></div>
+                `;
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+                dropZones.appendChild(zone);
+            });
+        }
+
+        function handleDragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.dataset.cardId);
+            event.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('active');
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('active');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const zone = event.currentTarget;
+            zone.classList.remove('active');
+            const cardId = event.dataTransfer.getData('text/plain');
+            const card = document.querySelector(`[data-card-id="${cardId}"]`);
+            if (!card || card.classList.contains('locked')) return;
+
+            const item = gameData.find(entry => entry.id === cardId);
+            if (!item) return;
+
+            if (zone.dataset.zone === item.category) {
+                zone.dataset.state = 'correct';
+                const zoneContent = zone.querySelector('.zone-content');
+                zoneContent.appendChild(card);
+                card.classList.add('locked');
+                card.draggable = false;
+                gameStreak += 1;
+                const bonus = Math.min(gameStreak * 2, 10);
+                gamePoints += 10 + bonus;
+                gameCompleted += 1;
+                placedCards[cardId] = true;
+                document.getElementById('gameResult').textContent = `✅ 任務完成！你已連續正確 ${gameStreak} 次，獲得 ${10 + bonus} 分。`;
+                const remaining = gameData.length - gameCompleted;
+                document.getElementById('gameQuest').textContent = remaining > 0 ? `下一個挑戰：還剩 ${remaining} 張行動卡片，維持連擊完成任務！` : '所有任務已完成，準備領取成果。';
+            } else {
+                zone.dataset.state = 'incorrect';
+                setTimeout(() => {
+                    zone.dataset.state = '';
+                }, 800);
+                gameStreak = 0;
+                document.getElementById('gameResult').textContent = '❌ 這張卡片放錯了，連擊中斷，請再接再厲。';
+            }
+
+            updateStats();
+            if (gameCompleted === gameData.length) {
+                clearInterval(gameTimer);
+                endMission(true);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('gameScore').textContent = `${gameCompleted} / ${gameData.length}`;
+            document.getElementById('gamePoints').textContent = gamePoints;
+            document.getElementById('gameCombo').textContent = gameStreak;
+        }
+
+        function endMission(success) {
+            if (success) {
+                document.getElementById('gameResult').textContent = `🎉 任務完成！你獲得 ${gamePoints} 分，成功守護正義。`;
+            } else {
+                document.getElementById('gameResult').textContent = '⏳ 時間到！任務尚未完成，請再挑戰一次。';
+            }
+            document.querySelectorAll('.action-card:not(.locked)').forEach(card => {
+                card.draggable = false;
+            });
+            document.getElementById('resetMissionBtn').classList.remove('hidden');
+        }
+
+        function resetMission() {
+            startMission();
+        }
+
+        function openMission() {
+            const missionTab = document.querySelector('.nav-item[data-page="page-quiz"]');
+            if (missionTab) missionTab.click();
+            startMission();
+        }
+
+        function setupDraggable(element, handle) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            let moved = false;
+
+            handle.onmousedown = (e) => {
+                e.preventDefault();
+                moved = false;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                document.onmouseup = () => {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                    if (!moved && element === dove) openMission();
+                };
+                
+                document.onmousemove = (e) => {
+                    e.preventDefault();
+                    moved = true;
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+
+                    let newTop = element.offsetTop - pos2;
+                    let newLeft = element.offsetLeft - pos1;
+
+                    const maxTop = window.innerHeight - element.offsetHeight;
+                    const maxLeft = window.innerWidth - element.offsetWidth;
+                    newTop = Math.max(0, Math.min(newTop, maxTop));
+                    newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+
+                    element.style.top = newTop + "px";
+                    element.style.left = newLeft + "px";
+                    element.style.bottom = "auto";
+                    element.style.right = "auto";
+                };
+            };
+        }
+
+        const messageForm = document.getElementById('messageForm');
+        const messageList = document.getElementById('messageList');
+        const storageKey = 'sdg16Messages';
+        let savedMessages = [];
+
+        function createMessageCard({ name, email, text, time }) {
+            const card = document.createElement('div');
+            card.className = 'message-card';
+            card.innerHTML = `
+                <strong>${name}${email ? ' · ' + email : ''}</strong>
+                <p>${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                <time>${time}</time>
+            `;
+            return card;
+        }
+
+        function loadSavedMessages() {
+            const stored = localStorage.getItem(storageKey);
+            if (!stored) return;
+            try {
+                const items = JSON.parse(stored);
+                if (!Array.isArray(items)) return;
+                savedMessages = items;
+                savedMessages.forEach(item => {
+                    const card = createMessageCard(item);
+                    messageList.appendChild(card);
+                });
+            } catch (error) {
+                console.warn('載入留言資料失敗：', error);
+            }
+        }
+
+        function saveMessages() {
+            localStorage.setItem(storageKey, JSON.stringify(savedMessages));
+        }
+
+        if (messageForm && messageList) {
+            loadSavedMessages();
+            messageForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = document.getElementById('messageName').value.trim() || '匿名朋友';
+                const email = document.getElementById('messageEmail').value.trim();
+                const message = document.getElementById('messageText').value.trim();
+                if (!message) return;
+
+                const time = new Date();
+                const timeLabel = time.toLocaleString('zh-Hant', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                const messageItem = {
+                    name,
+                    email,
+                    text: message,
+                    time: timeLabel
+                };
+
+                savedMessages.unshift(messageItem);
+                saveMessages();
+
+                const card = createMessageCard(messageItem);
+                messageList.prepend(card);
+                messageForm.reset();
+            });
+        }
+
+        setupDraggable(dove, dove);
+
+        // ===== 決策模擬器遊戲邏輯 =====
+        const gameEvents = [
+    {
+        tag: "反貪腐",
+        text: "有吹哨者揭發國防部高層涉嫌收取跨國軍火商的鉅額回扣。這牽涉到國家安全機密，軍方施壓要求你壓下此事。",
+        opt1: "成立獨立調查委員會，將貪污將領撤職查辦。",
+        opt2: "以「國家安全機密」為由封鎖消息，維持軍隊穩定。",
+        eff1: { peace: -15, justice: 20, inst: 20 },
+        eff2: { peace: 15, justice: -20, inst: -30 }
+    },
+    {
+        tag: "執法爭議",
+        text: "警方在鎮壓一場和平抗議時使用了過當武力，導致多名學生重傷。警政署長聲稱這是為了「維持社會秩序」。",
+        opt1: "嚴懲過當執法的員警，保障人民集會權利。",
+        opt2: "力挺警方，強調維持社會秩序的必要性。",
+        eff1: { peace: -10, justice: 25, inst: 10 },
+        eff2: { peace: 15, justice: -25, inst: -10 }
+    },
+    {
+        tag: "透明度法案",
+        text: "民間團體強烈要求通過《政府資訊公開法》，讓民眾能隨時查閱所有公共工程的預算流向。但這會大幅增加公務員的工作量。",
+        opt1: "全力推動法案，建立陽光政府。",
+        opt2: "暫緩推動，保護政府內部運作效率。",
+        eff1: { peace: 10, justice: 10, inst: 25 },
+        eff2: { peace: 0, justice: -10, inst: -20 }
+    },
+    {
+        tag: "人口販運",
+        text: "破獲一起大型跨國人口販運集團，但主嫌與鄰國高層關係密切。鄰國大使暗示，如果輕判主嫌，將給予豐厚的貿易優惠。",
+        opt1: "拒絕利益交換，依法重判人口販子。",
+        opt2: "同意遣返主嫌回鄰國受審，換取貿易合約。",
+        eff1: { peace: 0, justice: 25, inst: 15 },
+        eff2: { peace: 20, justice: -30, inst: -20 }
+    },
+    {
+        tag: "數位人權",
+        text: "情報局提議安裝一套名為「天網」的無差別監控系統，能大幅降低犯罪率，但會嚴重侵犯公民隱私。",
+        opt1: "否決提案，人權與隱私不容侵犯。",
+        opt2: "批准系統，為了絕對的安全犧牲一點隱私算什麼。",
+        eff1: { peace: -10, justice: 15, inst: 10 },
+        eff2: { peace: 25, justice: -25, inst: -10 }
+    },
+    {
+        tag: "司法改革",
+        text: "法院積案如山，許多窮困的被告因為請不起律師而被違法羈押數月。財政部表示沒有多餘預算擴編法扶資源。",
+        opt1: "削減其他部門預算，強行挹注法律扶助基金。",
+        opt2: "維持現狀，沒錢打官司是他們自己的問題。",
+        eff1: { peace: 10, justice: 20, inst: 10 },
+        eff2: { peace: -5, justice: -20, inst: -10 }
+    },
+    {
+        tag: "地方黑金",
+        text: "一名長期掌控地方資源的黑道角頭決定參選議員。他威脅如果不讓他順利當選，就會在選區內製造暴動。",
+        opt1: "加派警力掃蕩其黑幫勢力，絕不妥協。",
+        opt2: "與他暗中談判，給予部分工程利益安撫他。",
+        eff1: { peace: -25, justice: 20, inst: 15 },
+        eff2: { peace: 20, justice: -20, inst: -25 }
+    },
+    {
+        tag: "司法平權",
+        text: "偏鄉地區嚴重缺乏法院與法律扶助資源，民眾常因無法負擔交通費而被迫放棄訴訟。這導致偏鄉犯罪率悄悄上升。",
+        opt1: "投入重金建立「行動法庭」與遠距視訊報案系統。",
+        opt2: "忽視偏鄉需求，將資源集中在人口密集的都市。",
+        eff1: { peace: 15, justice: 20, inst: 10 },
+        eff2: { peace: -15, justice: -15, inst: -5 }
+    },
+    {
+        tag: "言論自由",
+        text: "網路上出現大量針對特定族群的仇恨言論，引發社會撕裂與街頭暴力。保守派強烈要求實行嚴格的「網路言論審查法」。",
+        opt1: "保障言論自由，但加重針對實體暴力的懲罰。",
+        opt2: "通過審查法案，強制過濾並刪除一切敏感言論。",
+        eff1: { peace: -15, justice: 15, inst: 10 },
+        eff2: { peace: 20, justice: -20, inst: -15 }
+    },
+    {
+        tag: "國際合作",
+        text: "聯合國提議在貴國首都設立「亞太反貪腐監督中心」，這將帶來龐大資金，但會讓本國政府的內部運作受到國際嚴格檢視。",
+        opt1: "展開雙臂歡迎，讓國家制度與國際標準接軌。",
+        opt2: "婉拒提案，宣稱「這是在干涉我國內政」。",
+        eff1: { peace: 5, justice: 15, inst: 25 },
+        eff2: { peace: 0, justice: -10, inst: -25 }
+    },
+    {
+        tag: "兒童保護",
+        text: "調查發現，國內最大的出口加工區有大量違法雇用童工的現象。強制取締會導致工廠倒閉、大量家庭失業。",
+        opt1: "嚴格取締並重罰企業，設立兒童安置與教育專案。",
+        opt2: "睜一隻眼閉一隻眼，保護脆弱的地方經濟命脈。",
+        eff1: { peace: -15, justice: 25, inst: 15 },
+        eff2: { peace: 15, justice: -30, inst: -15 }
+    },
+    {
+        tag: "吹哨者法案",
+        text: "一名工程師洩露了知名財團長期排放劇毒廢水的內部文件，財團揚言以違反保密協議對他提出天價求償。",
+        opt1: "推動《吹哨者保護法》，讓工程師免受法律追訴。",
+        opt2: "尊重合約精神，不介入這場民間企業的法律糾紛。",
+        eff1: { peace: -10, justice: 20, inst: 20 },
+        eff2: { peace: 10, justice: -20, inst: -15 }
+    },
+    {
+        tag: "監獄人權",
+        text: "國內監獄嚴重超收，生活環境極度惡劣，引發了受刑人的流血暴動。人權團體呼籲讓非暴力犯罪者提前假釋。",
+        opt1: "推動修復式司法與假釋，改善監獄環境。",
+        opt2: "以暴制暴，派出鎮暴警察強力鎮壓監獄暴動。",
+        eff1: { peace: 5, justice: 20, inst: 10 },
+        eff2: { peace: -15, justice: -20, inst: -5 }
+    },
+    {
+        tag: "選舉公正",
+        text: "關鍵選區爆發了嚴重的買票與作票疑雲。反對黨要求宣告選舉無效並重新投票，但這會引發巨大的政治動盪。",
+        opt1: "啟動獨立驗票機制，若查實作弊則重新選舉。",
+        opt2: "為了政局穩定，宣布承認現有的選舉結果。",
+        eff1: { peace: -20, justice: 25, inst: 25 },
+        eff2: { peace: 20, justice: -25, inst: -30 }
+    },
+    {
+        tag: "洗錢防制",
+        text: "國際金融組織警告，國內最大的商業銀行正在幫跨國販毒集團洗錢。開罰可能會導致該銀行引發金融海嘯。",
+        opt1: "凍結帳戶並起訴銀行高層，絕不容忍非法資金流。",
+        opt2: "與銀行達成秘密和解，低調處理以穩定金融市場。",
+        eff1: { peace: -20, justice: 20, inst: 20 },
+        eff2: { peace: 15, justice: -20, inst: -25 }
+    },
+    {
+        tag: "難民權益",
+        text: "大批因戰亂逃離的無國籍難民湧入邊境。國內保守派選民強烈抗議，要求立刻將他們驅逐出境。",
+        opt1: "提供臨時庇護所，並核發合法身分證件給難民。",
+        opt2: "封鎖邊境並強制遣返難民，以平息國內民怨。",
+        eff1: { peace: -25, justice: 25, inst: 10 },
+        eff2: { peace: 20, justice: -25, inst: 0 }
+    },
+    {
+        tag: "富豪逃稅",
+        text: "外國駭客公佈了一份名單，顯示國內多名政商名流利用海外空殼公司逃漏巨額稅款。這波及了你的多位政治盟友。",
+        opt1: "成立特別調查小組，徹查名單上的所有人。",
+        opt2: "質疑名單的真實性，冷處理這項爆料。",
+        eff1: { peace: -15, justice: 20, inst: 25 },
+        eff2: { peace: 15, justice: -20, inst: -25 }
+    },
+    {
+        tag: "性別暴力",
+        text: "現行的《家庭暴力防治法》罰則過輕，導致許多受害者不敢報案。婦女團體上街遊行要求修法，但保守團體強烈反對。",
+        opt1: "無懼保守派壓力，通過嚴格的性別平權與防暴法案。",
+        opt2: "暫緩爭議性法案，呼籲社會各界「多加溝通」。",
+        eff1: { peace: 10, justice: 20, inst: 15 },
+        eff2: { peace: -10, justice: -15, inst: -10 }
+    },
+    {
+        tag: "警力武裝",
+        text: "為了對抗日益猖獗的黑幫火力，警政署要求採購軍用級別的裝甲車與重武器配發給基層員警。",
+        opt1: "否決提案，警察軍事化容易導致執法過當與民眾恐懼。",
+        opt2: "批准採購，給予警方最強大的火力來鎮壓犯罪。",
+        eff1: { peace: 10, justice: 15, inst: 10 },
+        eff2: { peace: 15, justice: -20, inst: -5 }
+    },
+    {
+        tag: "司法獨立",
+        text: "執政黨正在推動一項違憲爭議極大的法案。黨團高層要求你向最高法院的大法官「施壓」，確保法案順利通過。",
+        opt1: "嚴正拒絕，堅定捍衛司法獨立與三權分立的底線。",
+        opt2: "暗示大法官配合，以換取未來法院的預算增加。",
+        eff1: { peace: -10, justice: 25, inst: 25 },
+        eff2: { peace: 15, justice: -30, inst: -30 }
+    },
+
+    // [科技與數位治理]
+    {
+        tag: "AI 判案",
+        text: "司法部提議導入「AI 演算法」來評估犯人的再犯風險與假釋資格，以減輕法官負擔。但測試發現它對少數族群有潛在偏見。",
+        opt1: "禁止 AI 介入司法裁量，維持純人工審判。",
+        opt2: "全面上線 AI 系統，效率與數據才是客觀的。",
+        eff1: { peace: 0, justice: 20, inst: -10 },
+        eff2: { peace: 10, justice: -25, inst: 20 }
+    },
+    {
+        tag: "深偽技術",
+        text: "選舉前夕，網路上瘋傳反對黨領袖收賄的「Deepfake（深偽）」假影片，引發群眾暴動。是否要動用緊急權力封鎖社群媒體？",
+        opt1: "維護網路自由，僅透過官方管道澄清事實。",
+        opt2: "強制關閉社群媒體伺服器，直到風波平息。",
+        eff1: { peace: -20, justice: 15, inst: 0 },
+        eff2: { peace: 20, justice: -20, inst: -15 }
+    },
+    {
+        tag: "網路實名制",
+        text: "網路詐騙與網路霸凌猖獗，國安局提議推動「全面網路實名制」，要求所有社群帳號必須綁定身分證。",
+        opt1: "拒絕實名制，保護匿名發言權與異議人士安全。",
+        opt2: "強行通過實名制，讓每個人對自己的言論負責。",
+        eff1: { peace: -10, justice: 15, inst: -10 },
+        eff2: { peace: 20, justice: -20, inst: 15 }
+    },
+    {
+        tag: "演算法監管",
+        text: "大型科技公司的演算法不斷推播極端言論以賺取點擊率。議會提議對這些公司進行演算法審查，甚至祭出鉅額罰款。",
+        opt1: "強力監管科技巨頭，要求演算法公開透明。",
+        opt2: "放任自由市場，政府不應干涉商業機密。",
+        eff1: { peace: 15, justice: 10, inst: 20 },
+        eff2: { peace: -15, justice: -10, inst: -10 }
+    },
+    {
+        tag: "加密貨幣",
+        text: "地下錢莊與黑幫大量使用加密貨幣洗錢，追蹤困難。中央銀行建議全面封殺所有去中心化加密貨幣交易。",
+        opt1: "擁抱區塊鏈技術，建立合規的數位資產追蹤法規。",
+        opt2: "全面封殺加密貨幣，寧可錯殺也不放過洗錢管道。",
+        eff1: { peace: 0, justice: 10, inst: 20 },
+        eff2: { peace: 15, justice: -15, inst: -10 }
+    },
+
+    // [環境與土地正義]
+    {
+        tag: "非法伐木",
+        text: "南部原始森林遭到跨國財團非法濫伐，當地原住民發起抗爭阻擋怪手。財團揚言撤資將導致數千人失業。",
+        opt1: "派警力保護原住民與森林，撤銷財團營業執照。",
+        opt2: "驅離原住民，保護外資以維持地方經濟發展。",
+        eff1: { peace: -15, justice: 25, inst: 15 },
+        eff2: { peace: 15, justice: -30, inst: -15 }
+    },
+    {
+        tag: "土地徵收",
+        text: "為了興建能大幅帶動經濟的高鐵，政府計畫強制徵收數百戶百年老宅。居民組成自救會，誓死抗爭到底。",
+        opt1: "重啟評估路線，尊重居民居住權，即便工程延宕。",
+        opt2: "動用防暴警察強勢清場，國家發展不容妥協。",
+        eff1: { peace: 15, justice: 20, inst: -15 },
+        eff2: { peace: -25, justice: -25, inst: 20 }
+    },
+    {
+        tag: "綠能貪腐",
+        text: "調查局發現，推動綠能轉型的百億國家基金中，有近半數落入了特定政客與「綠能皮包公司」的口袋。",
+        opt1: "全面凍結綠能基金並展開大搜查，哪怕計畫停擺。",
+        opt2: "低調處理個別涉案人員，維持綠能計畫表面進度。",
+        eff1: { peace: -10, justice: 25, inst: 25 },
+        eff2: { peace: 10, justice: -20, inst: -25 }
+    },
+    {
+        tag: "有毒廢棄物",
+        text: "發現某化工廠長期將有毒廢水排入地下水，導致當地癌症率飆升。化工廠老闆是你同黨的最大金主。",
+        opt1: "大義滅親，將廠長送辦並要求鉅額賠償。",
+        opt2: "私下要求其改善，對外掩蓋致癌報告以免引起恐慌。",
+        eff1: { peace: 15, justice: 25, inst: 20 },
+        eff2: { peace: -20, justice: -30, inst: -30 }
+    },
+    {
+        tag: "動保法案",
+        text: "民間強烈要求立法嚴懲虐待動物並禁止流浪動物撲殺，但地方政府表示收容所早已爆滿，無力負擔。",
+        opt1: "通過零撲殺法案，並將國家預算大量撥給動保機構。",
+        opt2: "維持現狀，將預算優先留給民生與基礎建設。",
+        eff1: { peace: 10, justice: 15, inst: 0 },
+        eff2: { peace: -5, justice: -10, inst: 5 }
+    },
+
+    // [執法與司法制度]
+    {
+        tag: "死刑存廢",
+        text: "一名殘酷的連續殺人犯即將被執行死刑。國際人權組織發出最後通牒，要求立刻停止死刑，否則將實施經濟制裁。",
+        opt1: "宣布暫停執行死刑，換取國際支持與人權地位。",
+        opt2: "依法執行槍決，給受害者家屬一個交代並平息民怨。",
+        eff1: { peace: -20, justice: 10, inst: 10 },
+        eff2: { peace: 20, justice: -10, inst: -10 }
+    },
+    {
+        tag: "陪審團制",
+        text: "民眾對「恐龍法官」的不滿達到頂點，要求全面引入英美式的國民陪審團制度，讓素人參與定罪。",
+        opt1: "啟動司法改革，引入國民法官制度。",
+        opt2: "拒絕提案，法律極度專業，不該被民粹左右。",
+        eff1: { peace: 15, justice: 15, inst: 10 },
+        eff2: { peace: -15, justice: -10, inst: 5 }
+    },
+    {
+        tag: "密錄器爭議",
+        text: "為了防止警察濫權，議會提議強制所有員警執勤時佩戴密錄器且不可手動關閉。警察工會威脅集體罷工。",
+        opt1: "強制執行密錄器政策，保障警民雙方權利。",
+        opt2: "對警察工會妥協，允許員警在「必要時」關閉鏡頭。",
+        eff1: { peace: -15, justice: 20, inst: 20 },
+        eff2: { peace: 15, justice: -20, inst: -15 }
+    },
+    {
+        tag: "微罪除罪化",
+        text: "監獄裡塞滿了因為吸食大麻或輕微竊盜的犯人。司法部提議將這些微罪除罪化以紓解監獄壓力。",
+        opt1: "通過微罪除罪化，將資源投入戒癮與社福輔導。",
+        opt2: "堅持「亂世用重典」，犯罪就是犯罪，絕不寬貸。",
+        eff1: { peace: 10, justice: 15, inst: 10 },
+        eff2: { peace: -10, justice: -10, inst: -5 }
+    },
+    {
+        tag: "臥底誘捕",
+        text: "警方為了破獲毒品大盤商，動用臥底警員故意引誘無辜邊緣人協助運毒再將其逮捕。人權律師指控這是違法陷害。",
+        opt1: "嚴格規範誘捕偵查的界線，釋放被陷害的邊緣人。",
+        opt2: "默許這種手段，只要能抓到大毒梟，過程不重要。",
+        eff1: { peace: -10, justice: 25, inst: 15 },
+        eff2: { peace: 20, justice: -25, inst: -10 }
+    },
+    {
+        tag: "特赦權力",
+        text: "你的前任總統因為貪污入獄，他依然掌握著強大的政治派系。他的派系威脅：不特赦他，就杯葛所有國家預算。",
+        opt1: "拒絕特赦，王子犯法與庶民同罪。",
+        opt2: "簽署特赦令，換取政治上的和平與預算通過。",
+        eff1: { peace: -25, justice: 25, inst: 20 },
+        eff2: { peace: 25, justice: -30, inst: -25 }
+    },
+    {
+        tag: "精神病患犯罪",
+        text: "一名患有嚴重精神分裂症的男子在街頭隨機傷人。媒體煽動群眾情緒，要求將其處死而非送入精神病院。",
+        opt1: "堅守法理，將其送往醫療機構進行強制治療。",
+        opt2: "順應民粹，干預司法要求判處極刑。",
+        eff1: { peace: -20, justice: 20, inst: 15 },
+        eff2: { peace: 20, justice: -25, inst: -20 }
+    },
+    {
+        tag: "法扶預算",
+        text: "經濟不景氣，財政部計畫大砍「公設辯護人」與法扶基金的預算，這將導致窮人完全失去法律防禦能力。",
+        opt1: "否決刪減，正義不該是有錢人的特權。",
+        opt2: "同意刪減，國家快破產了，顧不了那麼多。",
+        eff1: { peace: 5, justice: 25, inst: 15 },
+        eff2: { peace: -15, justice: -25, inst: -15 }
+    },
+    {
+        tag: "未成年犯罪",
+        text: "未成年黑幫分子犯下令人髮指的重案。社會輿論沸騰，要求下修刑事責任年齡，讓青少年當作成人受審。",
+        opt1: "拒絕下修，加強少年感化院的教育與社工輔導。",
+        opt2: "同意下修年齡，讓犯重罪的未成年人付出代價。",
+        eff1: { peace: -15, justice: 15, inst: 10 },
+        eff2: { peace: 15, justice: -10, inst: -5 }
+    },
+    {
+        tag: "證人保護",
+        text: "一名關鍵證人即將出庭指控跨國黑幫，但現有的證人保護計畫預算見底。黑幫已經對他發出追殺令。",
+        opt1: "動用總統預備金，給予最高規格的庇護與變更身分。",
+        opt2: "讓他自求多福，國家沒錢保護每一個人。",
+        eff1: { peace: 10, justice: 20, inst: 15 },
+        eff2: { peace: -20, justice: -25, inst: -10 }
+    },
+
+    // [政府治理與廉能]
+    {
+        tag: "官員財產申報",
+        text: "在野黨提案要求所有高階公務員的二等親內家屬都必須公開財產來源，以防洗錢。許多執政黨官員揚言辭職。",
+        opt1: "推動陽光法案，建立極度透明的財產申報機制。",
+        opt2: "阻擋法案，這過度侵犯官員家屬的隱私。",
+        eff1: { peace: -10, justice: 20, inst: 25 },
+        eff2: { peace: 15, justice: -15, inst: -20 }
+    },
+    {
+        tag: "旋轉門條款",
+        text: "財政部長剛卸任，立刻受邀擔任國內最大金控公司的董事長。這明顯有利益衝突，但現有法律有漏洞。",
+        opt1: "立刻修補漏洞並溯及既往，重罰該名卸任官員。",
+        opt2: "祝他高升，不破壞政商之間長久的默契。",
+        eff1: { peace: 0, justice: 15, inst: 25 },
+        eff2: { peace: 10, justice: -15, inst: -25 }
+    },
+    {
+        tag: "裙帶關係",
+        text: "你的得力助手將多項政府無須招標的顧問標案，發包給自己親戚開設的空殼公司。此事被獨立媒體爆料。",
+        opt1: "揮淚斬馬謖，將心腹移送法辦並追回款項。",
+        opt2: "動用關係施壓媒體撤下報導，保住心腹。",
+        eff1: { peace: 5, justice: 20, inst: 25 },
+        eff2: { peace: 10, justice: -25, inst: -30 }
+    },
+    {
+        tag: "國家機密",
+        text: "歷史檔案館解密了一批文件，顯示現任多位政壇大老在威權時期曾是秘密警察的線民。公佈文件將引發政壇大地震。",
+        opt1: "落實轉型正義，將真相公諸於世。",
+        opt2: "將檔案重新列為絕對機密，歷史就讓他過去。",
+        eff1: { peace: -25, justice: 25, inst: 15 },
+        eff2: { peace: 20, justice: -20, inst: -15 }
+    },
+    {
+        tag: "警察軍事化",
+        text: "為了防範恐怖攻擊，軍方提議將淘汰的裝甲車與重武器免費移交給各地警局。人權團體擔心這會導致警察過度武裝。",
+        opt1: "拒絕移交，維持警察作為「人民保母」的定位。",
+        opt2: "接受武裝，提升警方壓制犯罪與暴動的火力。",
+        eff1: { peace: 10, justice: 15, inst: 0 },
+        eff2: { peace: 20, justice: -15, inst: -10 }
+    },
+    {
+        tag: "遊說法",
+        text: "大企業透過合法的政治獻金與遊說，影響了多項環保法案的修訂。民間要求制定嚴格的《遊說法》限制企業影響力。",
+        opt1: "推動《遊說法》，斬斷金權政治的連結。",
+        opt2: "不予理會，選舉和政黨運作都需要龐大資金。",
+        eff1: { peace: -10, justice: 20, inst: 25 },
+        eff2: { peace: 10, justice: -15, inst: -25 }
+    },
+    {
+        tag: "媒體壟斷",
+        text: "國內最有錢的財團計畫收購僅存的兩家獨立電視台。如果收購成功，該財團將控制全國 80% 的新聞來源。",
+        opt1: "動用反壟斷法強制駁回這項收購案。",
+        opt2: "尊重自由市場交易，讓收購案順利過關。",
+        eff1: { peace: 10, justice: 20, inst: 15 },
+        eff2: { peace: -10, justice: -25, inst: -20 }
+    },
+    {
+        tag: "公務員罷工",
+        text: "因為長期低薪與過勞，全國公務員與基層醫護發起史無前例的大罷工，導致國家機器幾乎癱瘓。",
+        opt1: "承諾大幅加薪與改善工時，即便大幅增加國債。",
+        opt2: "宣布罷工非法，派出軍隊接管醫院與行政機構。",
+        eff1: { peace: 20, justice: 15, inst: 10 },
+        eff2: { peace: -25, justice: -20, inst: -15 }
+    },
+    {
+        tag: "黑客入侵",
+        text: "政府的內網遭到不明駭客入侵，大量高官的貪腐對話紀錄被竊取並威脅公開。駭客要求支付天價贖金。",
+        opt1: "拒付贖金，讓貪腐真相曝光並展開大規模整肅。",
+        opt2: "秘密支付贖金掩蓋醜聞，以保全政府顏面。",
+        eff1: { peace: -25, justice: 25, inst: 20 },
+        eff2: { peace: 15, justice: -25, inst: -30 }
+    },
+    {
+        tag: "地方選舉",
+        text: "在偏遠地區，地方士紳長期壟斷鄉鎮長職位，甚至沒有反對派敢參選。中央是否要強力介入打破這種「地方自治」？",
+        opt1: "派出獨立檢調徹查地方勢力，鼓勵青年參政。",
+        opt2: "不干涉地方政治生態，只要他們按時繳稅就好。",
+        eff1: { peace: -15, justice: 20, inst: 20 },
+        eff2: { peace: 10, justice: -15, inst: -15 }
+    },
+
+    // [社會包容與人權]
+    {
+        tag: "同性婚姻",
+        text: "最高法院裁定禁止同性婚姻違憲。現在你需要推動合法化，但保守派宗教團體威脅發動百萬人上街抗議。",
+        opt1: "捍衛憲法與平權，強勢通過同性婚姻法案。",
+        opt2: "推出妥協版的「專法」以安撫保守派。",
+        eff1: { peace: -20, justice: 25, inst: 15 },
+        eff2: { peace: 10, justice: -10, inst: -5 }
+    },
+    {
+        tag: "無障礙空間",
+        text: "身障權益團體控告政府，全國有 70% 的政府機關沒有合法的無障礙設施。全面改建需要耗費極大預算。",
+        opt1: "發行特別公債，全面升級公共設施的無障礙空間。",
+        opt2: "拖延戰術，表示預算不足只能「逐步改善」。",
+        eff1: { peace: 10, justice: 20, inst: 10 },
+        eff2: { peace: -10, justice: -15, inst: -5 }
+    },
+    {
+        tag: "原民傳統領域",
+        text: "原住民要求歸還其傳統領域的自治權，這塊土地目前正被國家用來開採高價值的稀土礦。",
+        opt1: "尊重原民權利，歸還土地並分享過去開採的利潤。",
+        opt2: "以「國家戰略資源」為由，拒絕歸還土地。",
+        eff1: { peace: -10, justice: 25, inst: 10 },
+        eff2: { peace: 15, justice: -20, inst: -10 }
+    },
+    {
+        tag: "外籍移工",
+        text: "外籍漁工遭到遠洋漁船船長非人道虐待的影片流出。國際要求徹查，但漁業公會表示太嚴格會讓漁業崩潰。",
+        opt1: "嚴格執法，實施強制勞檢並重罰涉案船東。",
+        opt2: "僅作表面裁罰，保護國內龐大的漁業利益。",
+        eff1: { peace: 10, justice: 25, inst: 20 },
+        eff2: { peace: -10, justice: -25, inst: -25 }
+    },
+    {
+        tag: "仇恨犯罪",
+        text: "針對特定種族少數群體的暴力攻擊激增。是否應推動嚴苛的「仇恨犯罪加重量刑法」？",
+        opt1: "立刻通過修法，向社會宣示反歧視的決心。",
+        opt2: "維持原法，認為動機難以證明，不需特別加重。",
+        eff1: { peace: 15, justice: 20, inst: 10 },
+        eff2: { peace: -15, justice: -15, inst: -5 }
+    },
+    {
+        tag: "宗教極端化",
+        text: "情報顯示某個偏激的宗教組織正在秘密囤積武器。若進行突襲搜查，可能會引發宗教迫害的爭議。",
+        opt1: "果斷突襲，維護社會安全絕不能手軟。",
+        opt2: "僅進行監視，避免觸及宗教自由的敏感神經。",
+        eff1: { peace: -15, justice: 10, inst: 15 },
+        eff2: { peace: -20, justice: -10, inst: -10 }
+    },
+    {
+        tag: "性別平權",
+        text: "統計顯示，女性在職場上的平均薪資仍遠低於男性。婦女部提議強制所有百人以上企業公開男女薪資差距。",
+        opt1: "支持強制公開，用透明度推動同工同酬。",
+        opt2: "反對公開，認為這會造成企業內部員工對立。",
+        eff1: { peace: 10, justice: 20, inst: 15 },
+        eff2: { peace: -10, justice: -15, inst: -10 }
+    },
+    {
+        tag: "語言權利",
+        text: "少數民族要求在公家機關與法院提供其母語的免費同步翻譯服務。這會大幅增加行政成本與人力。",
+        opt1: "撥款建立多語服務系統，保障每個人的司法近用權。",
+        opt2: "要求所有人學好官方語言，拒絕提供翻譯。",
+        eff1: { peace: 10, justice: 20, inst: 10 },
+        eff2: { peace: -15, justice: -15, inst: -10 }
+    },
+    {
+        tag: "貧民窟清理",
+        text: "為了舉辦國際大型運動會，市府打算強制拆除市中心的貧民窟以美化市容，將居民趕往偏遠郊區。",
+        opt1: "停止強拆，改為就地改善貧民窟的水電與居住環境。",
+        opt2: "鐵腕拆除，為了國家顏面這點犧牲是必要的。",
+        eff1: { peace: 15, justice: 20, inst: 10 },
+        eff2: { peace: -25, justice: -25, inst: -15 }
+    },
+    {
+        tag: "遊民管制",
+        text: "市區遊民數量大增，商家抱怨影響生意。警察局提議制定「反流浪法」，允許強制將遊民趕出商業區。",
+        opt1: "否決法案，增加庇護所與就業輔導資源。",
+        opt2: "通過法案，還給市民與商家乾淨的街道。",
+        eff1: { peace: 10, justice: 20, inst: 10 },
+        eff2: { peace: 15, justice: -25, inst: -10 }
+    },
+
+    // [國際局勢與邊境]
+    {
+        tag: "國際制裁",
+        text: "一個強大的獨裁國家對貴國進行了毫無理由的經濟封鎖，並要求貴國引渡一名流亡的異議人士以換取解封。",
+        opt1: "堅守人權底線，拒絕引渡並尋求其他國際奧援。",
+        opt2: "交出異議人士，國家的經濟生存比一個人的命重要。",
+        eff1: { peace: -20, justice: 25, inst: 15 },
+        eff2: { peace: 20, justice: -30, inst: -20 }
+    },
+    {
+        tag: "邊境走私",
+        text: "邊境守軍被揭發長期收受跨國販毒集團的賄賂，放行毒品進入國內。這牽涉到邊防軍的最高指揮官。",
+        opt1: "全面清洗邊防軍高層，嚴懲貪腐。",
+        opt2: "低調更換駐軍，避免軍心動盪導致邊境防禦空虛。",
+        eff1: { peace: -15, justice: 25, inst: 25 },
+        eff2: { peace: 10, justice: -15, inst: -20 }
+    },
+    {
+        tag: "海外人權",
+        text: "你國最大的跨國企業在非洲開採鑽石時，涉嫌資助當地的軍閥引發內戰。國際法庭要求貴國配合調查。",
+        opt1: "全力配合國際調查，並凍結該企業的國內資產。",
+        opt2: "包庇該企業，宣稱這是他國的內部事務。",
+        eff1: { peace: 5, justice: 25, inst: 20 },
+        eff2: { peace: 0, justice: -25, inst: -25 }
+    },
+    {
+        tag: "外國干預",
+        text: "情報局證實，敵對國家投入了數億資金在國內扶植假新聞農場與極端政客，企圖顛覆貴國政權。",
+        opt1: "公開情報，驅逐該國大使並立法防堵境外勢力。",
+        opt2: "為了避免戰爭風險，選擇隱忍並在檯面下處理。",
+        eff1: { peace: -20, justice: 15, inst: 20 },
+        eff2: { peace: 10, justice: -10, inst: -15 }
+    },
+    {
+        tag: "難民遣返",
+        text: "鄰國發生軍事政變，數千名尋求庇護的政治犯湧入邊境。鄰國軍方威脅：如果不遣返他們，將發動武裝衝突。",
+        opt1: "堅守不遣返原則，軍隊進入最高戒備狀態。",
+        opt2: "關閉邊境並遣返難民，避免把國家捲入戰爭。",
+        eff1: { peace: -25, justice: 25, inst: 15 },
+        eff2: { peace: 25, justice: -30, inst: -10 }
+    },
+    {
+        tag: "國際刑警",
+        text: "國際刑警組織發布了針對你國某位財閥的紅色通緝令。這位財閥是你競選連任的最大金主。",
+        opt1: "大公無私，立刻派警力逮捕並引渡該財閥。",
+        opt2: "拖延時間，讓財閥有機會逃往無引渡條約的國家。",
+        eff1: { peace: 0, justice: 20, inst: 20 },
+        eff2: { peace: 10, justice: -25, inst: -25 }
+    },
+    {
+        tag: "氣候難民",
+        text: "海平面上升導致某個太平洋島國即將沉沒。聯合國呼籲各國分攤接收這批「氣候難民」。",
+        opt1: "基於人道精神與國際責任，大方接收一批難民。",
+        opt2: "拒絕接收，國內資源已經夠少了，顧不了外國人。",
+        eff1: { peace: -10, justice: 20, inst: 10 },
+        eff2: { peace: 10, justice: -15, inst: 0 }
+    },
+    {
+        tag: "無人機攻擊",
+        text: "外國勢力使用無人機暗殺了藏身在你國境內的恐怖分子，但也炸死了十多名無辜平民。這嚴重侵犯了國家主權。",
+        opt1: "向國際法庭提告，並強烈譴責該國的軍事行動。",
+        opt2: "默默接受，畢竟他們幫你除掉了一個心腹大患。",
+        eff1: { peace: -10, justice: 20, inst: 15 },
+        eff2: { peace: 15, justice: -20, inst: -15 }
+    },
+    {
+        tag: "跨國網路犯罪",
+        text: "一個由年輕駭客組成的跨國集團癱瘓了多家黑心企業的伺服器。他們在你國被捕，民眾視他們為羅賓漢。",
+        opt1: "依法嚴辦，駭客行為就是犯罪，不論動機。",
+        opt2: "暗中提供保護，將他們吸收進國家網軍。",
+        eff1: { peace: -10, justice: 15, inst: 15 },
+        eff2: { peace: 10, justice: -15, inst: -20 }
+    },
+    {
+        tag: "外交豁免權",
+        text: "某大國駐你國的外交官酒駕撞死了一名大學生，並企圖利用外交豁免權逃回國內。",
+        opt1: "派警察封鎖機場，強硬要求該國放棄豁免權接受審判。",
+        opt2: "無奈放行，得罪這個超級大國會帶來毀滅性的報復。",
+        eff1: { peace: -20, justice: 25, inst: 15 },
+        eff2: { peace: 15, justice: -30, inst: -10 }
+    },
+
+    // [極端危機與突發事件]
+    {
+        tag: "疫情爆發",
+        text: "一種致命的傳染病開始蔓延。衛生部建議實施全國封城，但這會讓經濟崩潰並嚴重限制人民自由。",
+        opt1: "宣布緊急狀態，強制封城並出動軍隊維持秩序。",
+        opt2: "維持開放，依靠民眾自律與自然免疫。",
+        eff1: { peace: 15, justice: -15, inst: 20 },
+        eff2: { peace: -30, justice: 10, inst: -20 }
+    },
+    {
+        tag: "暗殺企圖",
+        text: "你在一場造勢活動中遭到槍擊，險些喪命。國安局要求趁機宣布戒嚴，逮捕所有反對黨領袖。",
+        opt1: "拒絕戒嚴，堅持透過合法司法途徑調查真兇。",
+        opt2: "宣布戒嚴，這是剷除異己與鞏固權力的絕佳時機。",
+        eff1: { peace: -15, justice: 25, inst: 20 },
+        eff2: { peace: 25, justice: -35, inst: -30 }
+    },
+    {
+        tag: "司法大罷工",
+        text: "為了抗議政治力干預司法，全國 80% 的法官與檢察官決定集體罷工。社會治安開始面臨崩潰。",
+        opt1: "向法界妥協，簽署保證司法絕對獨立的協定。",
+        opt2: "強硬威脅解雇所有罷工者，並用年輕律師填補空缺。",
+        eff1: { peace: 10, justice: 25, inst: 20 },
+        eff2: { peace: -25, justice: -20, inst: -25 }
+    },
+    {
+        tag: "邪教滲透",
+        text: "調查發現，一個提倡末日論的危險邪教已經滲透進了政府的教育與軍警系統，他們正計畫發動恐怖攻擊。",
+        opt1: "立刻進行跨部會的深度清洗，逮捕所有相關人員。",
+        opt2: "為了避免打草驚蛇引起提早暴動，只能暗中監控。",
+        eff1: { peace: -20, justice: 15, inst: 25 },
+        eff2: { peace: 10, justice: -10, inst: -10 }
+    },
+    {
+        tag: "巨型天災",
+        text: "一場百年大地震摧毀了半個首都。賑災物資遭到地方黑道與貪官的聯手侵吞，災民已經瀕臨暴動。",
+        opt1: "派出軍隊接管物資分配，就地正法貪污份子。",
+        opt2: "依賴地方勢力協助分發物資，以求最快送達災區。",
+        eff1: { peace: 15, justice: 20, inst: 15 },
+        eff2: { peace: -20, justice: -20, inst: -25 }
+    },
+    {
+        tag: "國會暴動",
+        text: "一群不滿選舉結果的極端份子攻佔了國會大廈，挾持了數十名議員。鎮暴部隊請求使用實彈開火授權。",
+        opt1: "拒絕實彈，要求警方使用催淚瓦斯與談判解決。",
+        opt2: "授權開火，國家最高殿堂不容恐怖份子踐踏。",
+        eff1: { peace: -15, justice: 20, inst: 10 },
+        eff2: { peace: 25, justice: -25, inst: -15 }
+    },
+    {
+        tag: "國家破產",
+        text: "國庫即將見底，國際貨幣基金組織（IMF）願意紓困，但條件是立刻大砍全國的養老金與醫療補貼。",
+        opt1: "接受嚴苛條件，忍痛削減福利以保住國家信用。",
+        opt2: "拒絕 IMF，選擇印鈔票引發惡性通膨，保住福利。",
+        eff1: { peace: -25, justice: -10, inst: 20 },
+        eff2: { peace: 10, justice: -15, inst: -30 }
+    },
+    {
+        tag: "監聽醜聞",
+        text: "媒體踢爆情報局未經法院許可，長期大規模監聽全國政要與記者的電話。情報局長辯稱這是為了反恐。",
+        opt1: "撤換情報局長，並將所有違法監聽資料銷毀。",
+        opt2: "暗中把記者的黑資料留下來，用來控制輿論。",
+        eff1: { peace: 10, justice: 25, inst: 20 },
+        eff2: { peace: 15, justice: -30, inst: -25 }
+    },
+    {
+        tag: "核廢料爭議",
+        text: "高階核廢料無處可放，政府秘密決定將其埋在一個偏遠的原住民村落底下。消息走漏，當地爆發激烈抗爭。",
+        opt1: "暫停計畫，重新尋求全國共識與透明的選址機制。",
+        opt2: "加派警力鎮壓抗爭，為了全國用電這是必要的犧牲。",
+        eff1: { peace: 10, justice: 20, inst: 15 },
+        eff2: { peace: -20, justice: -25, inst: -15 }
+    },
+    {
+        tag: "人工智慧暴走",
+        text: "政府導入的自動化社會福利分配 AI 發生重大錯誤，導致數百萬低收入戶領不到救濟金，街頭出現打砸搶。",
+        opt1: "立刻拔掉 AI 插頭，改用人工發放，並公開道歉。",
+        opt2: "堅稱系統沒錯，派警察上街鎮壓打砸搶的暴徒。",
+        eff1: { peace: 15, justice: 20, inst: 10 },
+        eff2: { peace: -30, justice: -20, inst: -20 }
+    },
+
+    // [教育、醫療與文化]
+    {
+        tag: "教科書審查",
+        text: "教育部提議修改歷史教科書，刪除過去獨裁政府屠殺平民的篇章，以「促進國家團結與和諧」。",
+        opt1: "強烈反對，沒有真相就沒有真正的和解。",
+        opt2: "同意修改，忘記仇恨才能讓國家繼續前進。",
+        eff1: { peace: -15, justice: 25, inst: 10 },
+        eff2: { peace: 20, justice: -20, inst: -15 }
+    },
+    {
+        tag: "醫療資源分配",
+        text: "偏鄉醫院因長期虧損面臨倒閉，數十萬居民將失去醫療保障。財政部建議讓其倒閉以節省預算。",
+        opt1: "政府全面接管並由國庫補貼，保障基本人權。",
+        opt2: "同意關閉，並鼓勵居民搬遷到城市。",
+        eff1: { peace: 15, justice: 20, inst: 10 },
+        eff2: { peace: -20, justice: -15, inst: -10 }
+    },
+    {
+        tag: "學術自由",
+        text: "一所國立大學的教授發表了批評政府的論文。教育部高層暗示大學校長應該以「學術不倫」為由解聘他。",
+        opt1: "捍衛學術自由，嚴懲干預大學自治的教育部官員。",
+        opt2: "默許解聘，政府不該花錢養咬自己手的狗。",
+        eff1: { peace: 0, justice: 25, inst: 20 },
+        eff2: { peace: 15, justice: -25, inst: -20 }
+    },
+    {
+        tag: "器官買賣",
+        text: "破獲一個由頂尖外科醫生組成的非法器官販賣集團。如果將他們全數判刑，國內將失去最優秀的醫療團隊。",
+        opt1: "法律之前人人平等，將這群無良醫生全部關進大牢。",
+        opt2: "給予緩刑，讓他們留在醫院「戴罪立功」拯救人命。",
+        eff1: { peace: 0, justice: 25, inst: 20 },
+        eff2: { peace: 15, justice: -20, inst: -20 }
+    },
+    {
+        tag: "網路斷網",
+        text: "為了阻止大規模的學生反政府示威串聯，國安會議建議切斷全國的網際網路連線。",
+        opt1: "拒絕斷網，保障人民通訊與集會結社的自由。",
+        opt2: "下令斷網，沒有網路他們就無法組織暴動。",
+        eff1: { peace: -20, justice: 20, inst: 10 },
+        eff2: { peace: 25, justice: -30, inst: -20 }
+    },
+    {
+        tag: "基因編輯",
+        text: "一家生技公司秘密進行了非法的人類嬰兒基因編輯實驗以消除遺傳疾病。這嚴重違反了醫學倫理法規。",
+        opt1: "重罰公司並逮捕負責人，倫理底線不可跨越。",
+        opt2: "沒收研究數據供國家使用，秘密赦免科學家。",
+        eff1: { peace: 0, justice: 20, inst: 15 },
+        eff2: { peace: 10, justice: -20, inst: -15 }
+    },
+    {
+        tag: "體育洗白",
+        text: "一個惡名昭彰的極權國家提議全額出資在貴國舉辦世界運動會，企圖藉此「洗白」其國際形象。",
+        opt1: "拒絕血腥資金，不讓體育成為獨裁者的遮羞布。",
+        opt2: "欣然接受，免費的國際賽事能帶來龐大觀光收益。",
+        eff1: { peace: -10, justice: 20, inst: 15 },
+        eff2: { peace: 15, justice: -20, inst: -15 }
+    },
+    {
+        tag: "童婚習俗",
+        text: "在某些保守地區，未成年童婚的習俗依然盛行。如果強力立法禁止，將會引發當地部落的武裝叛亂。",
+        opt1: "強行推進廢除童婚法案，保護女童人權。",
+        opt2: "暫緩立法，給予地方幾十年的「緩衝期」。",
+        eff1: { peace: -25, justice: 25, inst: 15 },
+        eff2: { peace: 20, justice: -20, inst: -10 }
+    },
+    {
+        tag: "私營監獄",
+        text: "財政困難下，有財團提議將公立監獄私有化。但過去經驗顯示，私營監獄為了獲利會盡可能削減犯人伙食與醫療。",
+        opt1: "拒絕監獄私有化，刑罰權必須掌握在國家手中。",
+        opt2: "同意私有化，幫國庫省下大筆納稅錢才是首要任務。",
+        eff1: { peace: 10, justice: 20, inst: 10 },
+        eff2: { peace: -10, justice: -25, inst: -15 }
+    },
+    {
+        tag: "藥價壟斷",
+        text: "一家跨國藥廠壟斷了一款救命癌症藥物，並將價格調漲了 500%。無數病患因為買不起而等死。",
+        opt1: "動用國家緊急權，強行啟動「專利強制授權」生產學名藥。",
+        opt2: "尊重智慧財產權，不敢得罪跨國藥廠與國際貿易組織。",
+        eff1: { peace: 15, justice: 25, inst: 10 },
+        eff2: { peace: -25, justice: -20, inst: -10 }
+    },
+
+    // [金融與經濟正義]
+    {
+        tag: "最低工資",
+        text: "通貨膨脹嚴重，勞工團體要求一次調漲 20% 最低工資。企業界威脅這會導致大規模裁員與外資撤離。",
+        opt1: "支持勞工，強勢調漲最低工資以保障生存權。",
+        opt2: "向資方妥協，僅微幅調漲以避免經濟動盪。",
+        eff1: { peace: 10, justice: 20, inst: 5 },
+        eff2: { peace: -15, justice: -15, inst: 10 }
+    },
+    {
+        tag: "房價炒作",
+        text: "財團與建商聯手炒作房地產，年輕人完全買不起房，民怨沸騰。提議徵收「空屋稅」與「囤房稅」。",
+        opt1: "強力打房，通過重稅逼迫建商釋出空屋。",
+        opt2: "房地產是經濟火車頭，反對過度干預自由市場。",
+        eff1: { peace: 15, justice: 20, inst: 15 },
+        eff2: { peace: -20, justice: -20, inst: -10 }
+    },
+    {
+        tag: "避稅天堂",
+        text: "調查指出我國許多百大企業將總部設在海外避稅天堂，每年造成數百億稅損。稅務局提議全球追稅。",
+        opt1: "修法實施全球反避稅機制，讓富豪無所遁形。",
+        opt2: "擔憂引發企業出走潮，選擇對避稅行為睜一隻眼閉一隻眼。",
+        eff1: { peace: -10, justice: 25, inst: 20 },
+        eff2: { peace: 10, justice: -20, inst: -20 }
+    },
+    {
+        tag: "紓困貪腐",
+        text: "發放給中小企業的數百億疫情紓困金，被發現有大量空殼公司詐領。追回款項需要耗費極大行政成本。",
+        opt1: "成立專案小組，一毛錢都要追回來並嚴懲詐欺犯。",
+        opt2: "為了節省行政成本，放棄追討，當作呆帳處理。",
+        eff1: { peace: -10, justice: 20, inst: 25 },
+        eff2: { peace: 10, justice: -15, inst: -25 }
+    },
+    {
+        tag: "地下經濟",
+        text: "夜市與攤販長期不開發票逃漏稅，但也養活了無數底層家庭。國稅局提議動用警力強制全面查稅。",
+        opt1: "暫緩強硬查稅，改以輔導方式協助其合法化。",
+        opt2: "公平至上，任何人做生意都必須誠實納稅，強制執法。",
+        eff1: { peace: 15, justice: -10, inst: -10 },
+        eff2: { peace: -20, justice: 15, inst: 15 }
+    },
+    {
+        tag: "主權基金",
+        text: "國家主權基金的經理人未經授權進行高風險投資，慘賠了百億。他背後有著極強的政治靠山。",
+        opt1: "將經理人移送法辦，並公佈詳細虧損報告。",
+        opt2: "動用國庫其他資金秘密填補虧損，掩蓋這樁醜聞。",
+        eff1: { peace: -10, justice: 20, inst: 25 },
+        eff2: { peace: 15, justice: -25, inst: -30 }
+    },
+    {
+        tag: "基礎建設",
+        text: "一條造價昂貴的高速公路剛落成便出現嚴重裂縫。承包商是執政黨的高級顧問，他聲稱這是「正常現象」。",
+        opt1: "立刻封路調查，控告承包商偷工減料。",
+        opt2: "幫承包商背書，僅要求其進行表面修補。",
+        eff1: { peace: 10, justice: 25, inst: 20 },
+        eff2: { peace: -20, justice: -25, inst: -25 }
+    },
+    {
+        tag: "工會權力",
+        text: "全國最大的交通工會威脅在春節期間罷工，要求在董事會中加入勞工代表以監督高層的自肥行為。",
+        opt1: "修法強制大型企業設置「勞工董事」，落實產業民主。",
+        opt2: "動用法院發布禁制令，強行阻止罷工發生。",
+        eff1: { peace: -10, justice: 20, inst: 15 },
+        eff2: { peace: 20, justice: -20, inst: -15 }
+    },
+    {
+        tag: "外資壟斷",
+        text: "自來水公司即將破產，一家外資企業提議全額收購，但這將使得國家的民生水資源完全受制於外國人。",
+        opt1: "以國家安全為由拒絕收購，由國庫承擔債務。",
+        opt2: "同意收購，自由市場不該有國界之分。",
+        eff1: { peace: 10, justice: 15, inst: 15 },
+        eff2: { peace: -15, justice: -15, inst: -20 }
+    },
+    {
+        tag: "銀行倒閉",
+        text: "一家因高層掏空而倒閉的銀行引發了擠兌潮。民眾一生的積蓄化為烏有，要求政府動用納稅人的錢全額賠償。",
+        opt1: "政府擔下責任全額賠償，並發布通緝令追捕掏空高層。",
+        opt2: "依照存款保險上限賠償，投資人必須自己承擔部分風險。",
+        eff1: { peace: 20, justice: -10, inst: 15 },
+        eff2: { peace: -25, justice: 15, inst: -10 }
+    },
+
+    // [軍事與國安]
+    {
+        tag: "軍事政變",
+        text: "由於你推動的轉型正義法案觸怒了保守派將領，情報顯示軍方正在秘密集結，準備發動政變推翻政府。",
+        opt1: "先發制人，動用忠誠的特種部隊逮捕叛變將領。",
+        opt2: "向軍方妥協，立刻撤回所有惹議的改革法案。",
+        eff1: { peace: -30, justice: 20, inst: 25 },
+        eff2: { peace: 20, justice: -30, inst: -25 }
+    },
+    {
+        tag: "傭兵集團",
+        text: "國防預算不足，有人提議將保護海外礦區的任務外包給聲名狼藉但效率極高的私人傭兵集團。",
+        opt1: "拒絕外包，國家的武力使用不該淪為商業買賣。",
+        opt2: "雇用傭兵，只要能保護國家利益，誰開槍都一樣。",
+        eff1: { peace: 5, justice: 15, inst: 10 },
+        eff2: { peace: 15, justice: -20, inst: -15 }
+    },
+    {
+        tag: "強制徵兵",
+        text: "鄰國軍事威脅急遽升高。國防部要求立刻恢復兩年制的強制徵兵制，這將引起年輕世代的強烈反彈。",
+        opt1: "宣布恢復徵兵，國家安全沒有妥協空間。",
+        opt2: "維持募兵制，依靠購買先進武器與外交斡旋來避戰。",
+        eff1: { peace: -20, justice: 0, inst: 15 },
+        eff2: { peace: 20, justice: 0, inst: -10 }
+    },
+    {
+        tag: "生化武器",
+        text: "調查記者發現，前朝政府在深山裡留下一座秘密的生化武器實驗室。國際社會嚴禁此類武器。",
+        opt1: "主動向聯合國通報並邀請國際專家協助銷毀。",
+        opt2: "將實驗室重新封存並列為最高機密，留作未來的王牌。",
+        eff1: { peace: 10, justice: 20, inst: 20 },
+        eff2: { peace: -10, justice: -15, inst: -25 }
+    },
+    {
+        tag: "情報洩密",
+        text: "一名情報局分析師將政府長期非法監控政敵的檔案全部公佈到了網路上，他目前正躲在某國大使館尋求庇護。",
+        opt1: "承認監控錯誤並推動情報局改革，不追究分析師。",
+        opt2: "將他定調為叛國賊，動用一切外交手段逼迫交人。",
+        eff1: { peace: -10, justice: 25, inst: 20 },
+        eff2: { peace: 15, justice: -20, inst: -25 }
+    },
+    {
+        tag: "軍火採購",
+        text: "你需要購買一批先進戰鬥機。A國武器較差但願意提供大量回扣給你的政黨；B國武器精良但條件嚴苛。",
+        opt1: "選擇 B國，國家防衛不容貪腐利益介入。",
+        opt2: "選擇 A國，用這筆黑錢來穩固明年的大選。",
+        eff1: { peace: 10, justice: 15, inst: 20 },
+        eff2: { peace: 0, justice: -25, inst: -30 }
+    },
+    {
+        tag: "退伍軍人",
+        text: "大批參加過海外戰爭的退伍軍人因為嚴重的創傷後壓力症候群（PTSD）流落街頭，甚至引發治安事件。",
+        opt1: "大幅擴編退輔會預算，提供終身免費醫療與心理諮商。",
+        opt2: "視為一般治安事件處理，把鬧事的退伍軍人關進監獄。",
+        eff1: { peace: 15, justice: 20, inst: 10 },
+        eff2: { peace: -20, justice: -15, inst: -10 }
+    },
+    {
+        tag: "網路戰",
+        text: "國家的基礎電網遭到敵國駭客攻擊，導致全國大停電。軍方請求授權對敵國的民用設施發動毀滅性的網路報復。",
+        opt1: "拒絕攻擊民用設施，堅守國際武裝衝突法的底線。",
+        opt2: "授權報復，讓他們嚐嚐全國癱瘓的滋味。",
+        eff1: { peace: -15, justice: 15, inst: 10 },
+        eff2: { peace: 20, justice: -20, inst: -15 }
+    },
+    {
+        tag: "全民武裝",
+        text: "面對強鄰威脅，極右派政黨提案放寬槍砲彈藥管制，鼓勵「全民擁槍，保家衛國」。",
+        opt1: "堅決反對，槍枝氾濫只會讓國內治安先崩潰。",
+        opt2: "通過法案，讓每一條街道都成為敵人的噩夢。",
+        eff1: { peace: 15, justice: 10, inst: 10 },
+        eff2: { peace: -25, justice: -10, inst: -10 }
+    },
+    {
+        tag: "戰犯審判",
+        text: "國內發生了一場短暫的內戰。現在和平降臨，但民間要求將所有參與叛亂的軍隊高層送上絞刑台。",
+        opt1: "成立真相與和解委員會，給予部分將領特赦以換取和平過渡。",
+        opt2: "成立特別法庭，將所有叛亂將領全數判處死刑。",
+        eff1: { peace: 20, justice: -10, inst: 10 },
+        eff2: { peace: -25, justice: 25, inst: 15 }
+    }
+        ];
+
+        let gameState = {
+            peace: 50,
+            justice: 50,
+            inst: 50,
+            turn: 1,
+            maxTurns: 10
+        };
+
+        let gameCurrentDeck = [];
+        let gameCurrentEvent = null;
+
+        // DOM 元素
+        const gameBarPeace = document.getElementById('game-bar-peace');
+        const gameBarJustice = document.getElementById('game-bar-justice');
+        const gameBarInst = document.getElementById('game-bar-institution');
+        const gameCardEl = document.getElementById('game-card');
+        const gameCardTag = document.getElementById('game-card-tag');
+        const gameCardText = document.getElementById('game-card-text');
+        const gameBtnOpt1 = document.getElementById('btn-game-opt1');
+        const gameBtnOpt2 = document.getElementById('btn-game-opt2');
+        const gameTurnCounter = document.getElementById('game-turn-counter');
+
+        function showDecisionGameStart() {
+            document.getElementById('game-end-screen').classList.add('hidden');
+            document.getElementById('game-start-screen').classList.remove('hidden');
+        }
+
+        function startDecisionGame() {
+            const selectedYears = document.getElementById('game-year-select').value;
+            document.getElementById('game-start-screen').classList.add('hidden');
+            resetDecisionGame(parseInt(selectedYears));
+        }
+
+        function resetDecisionGame(years) {
+            gameState = { peace: 50, justice: 50, inst: 50, turn: 1, maxTurns: years };
+            gameCurrentDeck = [...gameEvents].sort(() => Math.random() - 0.5);
+            updateDecisionGameUI();
+            nextDecisionTurn();
+        }
+
+        function updateDecisionGameUI() {
+            gameState.peace = Math.max(0, Math.min(100, gameState.peace));
+            gameState.justice = Math.max(0, Math.min(100, gameState.justice));
+            gameState.inst = Math.max(0, Math.min(100, gameState.inst));
+
+            gameBarPeace.style.width = gameState.peace + '%';
+            gameBarJustice.style.width = gameState.justice + '%';
+            gameBarInst.style.width = gameState.inst + '%';
+
+            gameBarPeace.style.backgroundColor = gameState.peace <= 25 ? '#e74c3c' : '#27ae60';
+            gameBarJustice.style.backgroundColor = gameState.justice <= 25 ? '#e74c3c' : '#8e44ad';
+            gameBarInst.style.backgroundColor = gameState.inst <= 25 ? '#e74c3c' : '#f39c12';
+
+            gameTurnCounter.innerText = `第 ${gameState.turn} / ${gameState.maxTurns} 年`;
+        }
+
+        function nextDecisionTurn() {
+            if (gameState.peace <= 0 || gameState.justice <= 0 || gameState.inst <= 0) {
+                return decisionGameOver(false);
+            }
+            if (gameState.turn > gameState.maxTurns) {
+                return decisionGameOver(true);
+            }
+
+            if (gameCurrentDeck.length === 0) {
+                gameCurrentDeck = [...gameEvents].sort(() => Math.random() - 0.5);
+            }
+            
+            gameCurrentEvent = gameCurrentDeck.pop();
+
+            gameCardEl.classList.remove('fade-out', 'fade-in');
+            void gameCardEl.offsetWidth;
+            gameCardEl.classList.add('fade-in');
+
+            gameCardTag.innerText = gameCurrentEvent.tag;
+            gameCardText.innerText = gameCurrentEvent.text;
+            gameBtnOpt1.innerText = gameCurrentEvent.opt1;
+            gameBtnOpt2.innerText = gameCurrentEvent.opt2;
+        }
+
+        function makeDecision(choiceNum) {
+            gameCardEl.classList.add('fade-out');
+            
+            let eff = choiceNum === 1 ? gameCurrentEvent.eff1 : gameCurrentEvent.eff2;
+            gameState.peace += eff.peace;
+            gameState.justice += eff.justice;
+            gameState.inst += eff.inst;
+            gameState.turn++;
+
+            setTimeout(() => {
+                updateDecisionGameUI();
+                nextDecisionTurn();
+            }, 300);
+        }
+
+        function decisionGameOver(isWin) {
+            const endScreen = document.getElementById('game-end-screen');
+            const endTitle = document.getElementById('game-end-title');
+            const endDesc = document.getElementById('game-end-desc');
+
+            endScreen.classList.remove('hidden');
+
+            if (isWin) {
+                endTitle.innerText = "🏆 卓越的領袖";
+                endTitle.style.color = "#27ae60";
+                endDesc.innerHTML = `恭喜！你成功撐過了 <b>${gameState.maxTurns} 年</b> 的艱困任期。<br><br>最終政府指標：<br>🕊️ 和平：${gameState.peace}%<br>⚖️ 正義：${gameState.justice}%<br>🏛️ 廉能：${gameState.inst}%<br><br>你成功實踐了 SDG 16 的精神，建立了一個和平、正義且具包容性的健全社會！`;
+            } else {
+                endTitle.innerText = "🔥 政府垮台";
+                endTitle.style.color = "#e74c3c";
+                
+                let reason = "";
+                if (gameState.peace <= 0) reason = "社會陷入了無止盡的暴力與暴動，失去了『和平』，國家走向毀滅。";
+                else if (gameState.justice <= 0) reason = "法律淪為廢紙，人權被嚴重踐踏，失去『正義』的社會引發了全面革命。";
+                else if (gameState.inst <= 0) reason = "政府極度貪腐無能，體制完全崩潰，失去了『健全廉能』，國家陷入無政府狀態。";
+
+                endDesc.innerHTML = `你在第 <b>${gameState.turn} 年</b> 遭到了罷免。<br><br>${reason}<br><br>SDG 16 告訴我們，和平、正義與強健的機構缺一不可。請調整戰略，再次挑戰！`;
+            }
+        }
+        
+        // 1. 定義數據源 
+        const data = [
+    {
+        country: "挪威",
+        cpi: 84,      // CPI 2025 approx
+        gpi: 1.48,    // GPI recent range
+        homicide: 0.6, // per 100k (low stable country)
+        detainees: 24
+    },
+    {
+        country: "日本",
+        cpi: 73,
+        gpi: 1.34,
+        homicide: 0.2,
+        detainees: 10
+    },
+    {
+        country: "台灣",
+        cpi: 68,
+        gpi: 1.79,
+        homicide: 0.8,
+        detainees: 15
+    },
+    {
+        country: "美國",
+        cpi: 69,
+        gpi: 2.44,
+        homicide: 6.3,
+        detainees: 22
+    },
+    {
+        country: "巴西",
+        cpi: 36,
+        gpi: 2.55,
+        homicide: 21.0,
+        detainees: 30
+    },
+    {
+        country: "南非",
+        cpi: 43,
+        gpi: 2.40,
+        homicide: 43.0,
+        detainees: 33
+    }
+        ];
+
+        // 2. 定義指標的配置與樣式
+        const indicators = {
+            cpi: {
+                label: '清廉印象指數 (分數越高越清廉)',
+                desc: '評估專家及企業界對公共部門貪腐程度的印象。滿分為100分，分數越高代表國家越清廉。',
+                color: 'rgba(59, 130, 246, 0.8)', // 藍色
+                hoverColor: 'rgba(59, 130, 246, 1)',
+                unit: ' 分'
+            },
+            gpi: {
+                label: '全球和平指數 (數值越低越和平)',
+                desc: '綜合評估國內外衝突、社會安全程度及軍事化程度的指標。數值越低代表國家越和平。',
+                color: 'rgba(34, 197, 94, 0.8)', // 綠色
+                hoverColor: 'rgba(34, 197, 94, 1)',
+                unit: ''
+            },
+            homicide: {
+                label: '每十萬人兇殺率 (數值越低越安全)',
+                desc: '衡量社會暴力與安全程度的關鍵指標。數值代表每十萬人中死於蓄意謀殺的人數。',
+                color: 'rgba(239, 68, 68, 0.8)', // 紅色
+                hoverColor: 'rgba(239, 68, 68, 1)',
+                unit: ' 人'
+            },
+            detainees: {
+                label: '未判決羈押比例 (%)',
+                desc: '未經定罪即被關押的人口佔總監獄人口的比例，反映司法體系的效率與公平性。',
+                color: 'rgba(99, 102, 241, 0.8)', // 紫藍色
+                hoverColor: 'rgba(99, 102, 241, 1)',
+                unit: '%'
+            }
+        };
+
+        let myChart = null;
+
+        // 3. 圖表初始化函數
+        function initChart() {
+            const ctx = document.getElementById('sdgChart').getContext('2d');
+            
+            // 設定全域字體
+            Chart.defaults.font.family = "'Inter', 'Segoe UI', 'Microsoft JhengHei', sans-serif";
+            
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.country),
+                    datasets: [{
+                        label: '',
+                        data: [],
+                        backgroundColor: [],
+                        hoverBackgroundColor: [],
+                        borderRadius: 6, // 讓長條圖邊角圓潤
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            padding: 12,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 14 },
+                            callbacks: {
+                                label: function(context) {
+                                    const unit = indicators[document.getElementById('indicator-select').value].unit;
+                                    return `數值: ${context.raw}${unit}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f5f9',
+                                drawBorder: false
+                            },
+                            ticks: { color: '#64748b' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { 
+                                color: '#475569',
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    },
+                    animation: { duration: 500, easing: 'easeOutQuart' }
+                }
+            });
+
+            // 預設載入第一個指標
+            updateDashboard('cpi'); 
+        }
+
+        // 4. 更新數據的函數
+        function updateDashboard(indicatorKey) {
+            const meta = indicators[indicatorKey];
+            const values = data.map(d => d[indicatorKey]);
+            
+            // 更新圖表資料與樣式
+            myChart.data.datasets[0].label = meta.label;
+            myChart.data.datasets[0].data = values;
+            myChart.data.datasets[0].backgroundColor = meta.color;
+            myChart.data.datasets[0].hoverBackgroundColor = meta.hoverColor;
+            myChart.update();
+
+            // 計算並更新平均值
+            const avg = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1);
+            document.getElementById('avg-value').innerText = avg + meta.unit;
+            document.getElementById('indicator-desc').innerText = meta.desc;
+        }
+
+        // 5. 綁定下拉選單切換事件
+        document.getElementById('indicator-select').addEventListener('change', (e) => {
+            updateDashboard(e.target.value);
+        });
+
+        // 當網頁載入完成時啟動圖表
+        window.addEventListener('DOMContentLoaded', initChart);
+    </script>
+</body>
+</html>
